@@ -157,7 +157,7 @@ Once the "parent" "sees" these records it SHOULD start acceptance processing.
 This document will cover below how to make the CDS records visible to the
 right parental agent.
 
-We and [@I-D.ogud-dnsop-maintain-ds#00] argue that the publication of
+We and [@I-D.ietf-dnsop-maintain-ds#00] argue that the publication of
 CDS/CDNSKEY record is sufficient for the parent to start the acceptance
 processing. The main point is to provide authentication thus if the child is
 in "good" state then the DS upload should be simple to accept and publish. If
