@@ -6,9 +6,6 @@
 <?rfc sortrefs="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<?rfc private=""?>
-<?rfc topblock="yes"?>
-<?rfc comments="no"?>
 <front>
 <title abbrev="3-DNS-RRR">Third Party DNS operator to Registrars/Registries Protocol</title>
 
@@ -20,9 +17,7 @@
 <city></city>
 <code></code>
 <country></country>
-<region></region>
 </postal>
-<phone></phone>
 <email>jacques.latour@cira.ca</email>
 <uri></uri>
 </address>
@@ -35,9 +30,7 @@
 <city></city>
 <code></code>
 <country></country>
-<region></region>
 </postal>
-<phone></phone>
 <email>olafur+ietf@cloudflare.com</email>
 <uri></uri>
 </address>
@@ -50,9 +43,7 @@
 <city></city>
 <code></code>
 <country></country>
-<region></region>
 </postal>
-<phone></phone>
 <email>paul@nohats.ca</email>
 <uri></uri>
 </address>
@@ -65,9 +56,7 @@
 <city></city>
 <code></code>
 <country></country>
-<region></region>
 </postal>
-<phone></phone>
 <email>matt@conundrum.com</email>
 <uri></uri>
 </address>
@@ -77,36 +66,35 @@
 <area>Applications</area>
 <workgroup></workgroup>
 <keyword>dnssec</keyword>
-<keyword>delegation maintainance</keyword>
+<keyword>delegation maintenance</keyword>
 <keyword>trust anchors</keyword>
 
 
 <abstract>
 <t>There are several problems that arise in the standard
 Registrant/Registrar/Registry model when the operator of a zone is neither the
-Registrant nor the Registrar for the delegation.  Historically the issues have
+Registrant nor the Registrar for the delegation. Historically the issues have
 been minor, and limited to difficulty guiding the Registrant through the
-initial changes to the NS records for the delegation.  As this is usually a
+initial changes to the NS records for the delegation. As this is usually a
 one time activity when the operator first takes charge of the zone it has not
 been treated as a serious issue.
 </t>
-<t>When the domain on the other hand uses DNSSEC it necessary for the Registrant
-in this situation to make regular (sometimes annual) changes to the delegation
-in order to track KSK rollover, by updating the delegation's DS record(s).
-Under the current model this is prone to Registrant error and significant
-delays. Even when the Registrant has outsourced the operation of DNS to a
-third party the registrant still has to be in the loop to update the DS
-record.
+<t>On the other hand, when the domain is signed with DNSSEC it is necessary for
+the DS records in the parent delegation to be changed regularly in order to
+track KSK rollover. In the current model, this is subject to delays, as the
+DNS operator must get the attention of the Registrant, and is error prone, as
+the Registrant must successfully copy and paste DS data or DNSKEY data, which
+is difficult to visually compare.
 </t>
 <t>There is a need for a simple protocol that allows a third party DNS operator
-to update DS and NS records in a trusted manner for a delegation without
-involving the registrant for each operation.
+to update DS and NS records for a delegation, in a trusted manner, without
+involving the Registrant in each operation.
 </t>
 <t>The protocol described in this draft is REST based, and when used through an
 authenticated channel can be used to establish the DNSSEC Initial Trust (to
-turn on DNSSEC or bootstrap DNSSEC).  Once DNSSEC trust is established this
+turn on DNSSEC or bootstrap DNSSEC). Once DNSSEC trust is established this
 channel can be used to trigger maintenance of delegation records such as DS,
-NS, and glue records.   The protocol is kept as simple as possible.
+NS, and glue records. The protocol is kept as simple as possible.
 </t>
 </abstract>
 
@@ -115,43 +103,41 @@ NS, and glue records.   The protocol is kept as simple as possible.
 <middle>
 
 <section anchor="introduction" title="Introduction">
-<t>Why is this needed?  DNS registration systems today are designed around making
-registrations easy and fast. After the domain has been registered the there
-are really three options on who maintains the DNS zone that is loaded on the
-&quot;primary&quot; DNS servers for the domain this can be the Registrant, Registrar, or
-a third party DNS Operator.
+<t>DNS registration systems are designed around making registrations easy and
+fast. When it comes to setting up the master (or primary) DNS service, the
+level of ease varies greatly depending on whether the DNS operator is the
+Registrar, Registrant, or a third party.
 </t>
-<t>Unfortunately the ease to make changes differs for each one of these options.
-The Registrant needs to use the interface that the registrar provides to
-update NS and DS records. The Registrar on the other hand can make changes
-directly into the registration system. The third party DNS Operator on the
-hand needs to go through the Registrant to update any delegation information.
+<t>When the Registrar is the DNS operator, it is able to directly and
+automatically make changes at the Registry as necessary. If the Registrant
+is the DNS operator, they can make whatever changes they need using whatever
+interface the Registrar provides. A third party DNS operator, on the other
+hand, must go through the Registrant (who may or may not be technically
+capable) in order to have changes submitted through the Registrar to the
+Registry.
 </t>
-<t>Current system does not work well, there are many examples of failures
-including the inability to upload DS records due to non-support by Registrar
-interface, the registrant forgets/does-not perform action but tools proceed
-with key roll-over without checking that the new DS is in place. Another
-common failure is the DS record is not removed when the DNS Operator changes
-from one that supports DNSSEC signing to one that does not.
+<t>There are many examples of common failure modes with a third-party DNS
+operator:
 </t>
-<t>The failures result either inability to use DNSSEC or in validation failures
-that case the domain to become invalid and all users that are behind
-validating resolvers will not be able to to access the domain.
+<t>
+<list style="symbols">
+<t>submission of incorrect data to the Registrar due to copy and paste errors,
+or unintentionally omitting important data</t>
+<t>Registrants failing to submit data to the Registrar in a timely manner</t>
+<t>failure to remove DS records when moving from a DNS operator that supports
+DNSSEC to one that does not</t>
+</list>
+</t>
+<t>These sorts of human errors can result in partial or complete failure of a
+zone for anyone using a DNSSEC validating resolver. The protocol described by
+this draft is intended to simplify the process of updating delegation
+information, for both the Registrant and third party DNS operators, by
+enabling automation and eliminating obvious and common sources of human
+error.
 </t>
 </section>
 
-<section anchor="notional-conventions" title="Notional Conventions">
-
-<section anchor="definitions" title="Definitions">
-<t>For the purposes of this draft, a third-party DNS Operator is any DNS Operator
-responsible for a zone where the operator is neither the Registrant nor the
-Registrar of record for the delegation.
-</t>
-<t>Uses of the word 'Registrar' in this document may also be applied to
-resellers: an entity that sells delegations through a registrar with whom the
-entity has a reseller agreement.
-</t>
-</section>
+<section anchor="notational-conventions" title="Notational Conventions">
 
 <section anchor="rfc2119-keywords" title="RFC2119 Keywords">
 <t>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;,
@@ -159,85 +145,127 @@ entity has a reseller agreement.
 interpreted as described in <xref target="RFC2119"/>.
 </t>
 </section>
-</section>
 
-<section anchor="what-is-the-goal" title="What is the goal?">
-<t>The primary goal is to use the DNS protocol to provide information from child
-zone to the parent zone, to maintain the delegation information. The
-precondition for this to be practical is that the domain is DNSSEC signed.
+<section anchor="definitions" title="Definitions">
+<t>For the purposes of this document, a third-party DNS Operator is any DNS
+Operator responsible for a zone where the operator is neither the Registrant
+nor the Registrar of record for the delegation.
 </t>
-<t>In the general case there should be a way to find the right Registrar/Registry
-entity to talk to but that does not exist. Whois[] is the natural protocol to
-carry such information but that protocol is unreliable and hard to parse. Its
-proposed successor RDAP <xref target="RFC7480"/> has yet be deployed on most TLD's.
-</t>
-<t>The preferred communication mechanism is to use is to use a REST <xref target="RFC6690"/>
-call to start processing of the requested delegation information.
-</t>
-
-<section anchor="why-dnssec" title="Why DNSSEC?">
-<t>DNSSEC <xref target="RFC4035"/> provides data authentication for DNS answers, having DNSSEC
-enabled makes it possible to trust the answers. The biggest stumbling block is
-deploying DNSSEC is the initial configuration of the DNSSEC domain trust
-anchor in the parent, DS record.
+<t>Uses of the word 'Registrar' in this document may also be applied to
+Resellers: an entity that sells delegations through a Registrar with whom the
+entity has a Reseller agreement.
 </t>
 </section>
 
-<section anchor="how-does-a-child-signal-its-parent-it-wants-dnssec-trust-anchor--the-child" title="How does a child signal its parent it wants DNSSEC Trust Anchor?  The child">
-<t>needs first to sign the domain, then the child can &quot;upload&quot; the DS record to
-its parent. The &quot;normal&quot; way to upload is to go through registration
-interface, but that fails frequently. The DNS Operator may not have access to
-the interface thus the registrant needs to relay the information. For large
-operations this does not scale, as evident in lack of Trust Anchors for signed
-deployments that are operated by third parties.
+<section anchor="other-document-conventions" title="Other Document Conventions">
+<t>Whenever this document refers to a parent organization making changes to its
+zone, the organization may be the Registry directly modifying its zone, or a
+Registrar or Reseller directing the Registry to make changes whether through
+EPP or some other registration protocol.
 </t>
-<t>The child can signal its desire to have DNSSEC validation enabled by
-publishing one of the special DNS records CDS and/or CDNSKEY<xref target="RFC7344"/> and
-its proposed extension <xref target="I-D.ietf-dnsop-maintain-ds"/>.
+</section>
+</section>
+
+<section anchor="protocol-overview" title="Protocol Overview">
+<t>The primary goal of the described protocol is to securely pass updated
+delegation information from a child zone operator to its parent.
 </t>
-<t>Once the &quot;parent&quot; &quot;sees&quot; these records it SHOULD start acceptance processing.
-This document will cover below how to make the CDS records visible to the
-right parental agent.
+<t>The first step in this process for a DNS operator is parent discovery.
+Although the parent name servers may be easily found, the correct organization
+to pass updates to may not be obvious, and the URI for an API might still be
+more difficult to find. In some cases the Registry may directly accept
+updates of delegation information, or the correct recipient of updates may be
+one of hundreds of possible Registrars. WHOIS <xref target="RFC3912"/> might seem like the
+natural mechanism to discover the entry point for the API at the parent
+organization, but parent discovery must be automated, and the lack of a formal
+standard for the data structure of a WHOIS response makes that infeasible.
+RDAP <xref target="RFC7480"/>, the successor to WHOIS, provides this standardized response
+however it may be some time before RDAP achieves wide deployment. A simple
+discovery API that can be easily deployed while registries and Registrars deal
+with the larger problem of rolling out RDAP may be advisable.
 </t>
-<t>We and <xref target="I-D.ogud-dnsop-maintain-ds"/> argue that the publication of
-CDS/CDNSKEY record is sufficient for the parent to start the acceptance
-processing. The main point is to provide authentication thus if the child is
-in &quot;good&quot; state then the DS upload should be simple to accept and publish. If
-there is a problem the parent has ability to not add the DS.
+<t>Once the zone operator has identified the URI for the API at the parent, this
+REST-based <xref target="RFC6690"/> protocol may be used to submit requests to the parent to
+make changes to the child records (NS, DS, etc.) contained in the parent zone.
+The parent will use the contents of the child zone to verify requests made via
+this API, and to discover information required to complete these requests.
+Validation of requests made through this protocol require that both the child
+and parent zones MUST be DNSSEC signed.
+</t>
+
+<section anchor="requiring-dnssec" title="Requiring DNSSEC">
+<t>Since the parent and child organizations do not necessarily have a secure
+channel arranged prior to the first use of this API, it is necessary that the
+parent organization be able to validate requests being made. DNSSEC
+<xref target="RFC4035"/> provides data validation for DNS answers; having both zones DNSSEC
+signed makes it possible for the parent to validate and trust the records in
+the child zone.
+</t>
+<t>The most difficult aspect of this is the initial setting of the DS record in
+the parent zone, since prior to this the parent organization has no way of
+validating the CDS records in the child zone.
 </t>
 </section>
 
-<section anchor="what-checks-are-needed-by-parent" title="What checks are needed by parent?">
-<t>The parent upon receiving a signal that it check the child for desire for DS
-record publication. The basic tests include,
+<section anchor="signalling-the-parent-to-add-ds" title="Signalling the Parent to Add DS">
+<t>Before contacting the parent organization, the child organization must first
+sign the zone. Once signed, the child organization can signal its desire to
+have DNSSEC validation enabled by publishing one of the special DNS records
+CDS and/or CDNSKEY <xref target="RFC7344"/>. The parent and child SHOULD support and use
+the CDS/CDNSKEY extensions proposed in <xref target="I-D.ietf-dnsop-maintain-ds"/>
 </t>
+<t>Once these records are published, the child organization can use this API to
+indicate to the parent that CDS processing should begin.
+</t>
+</section>
 
-<figure align="center"><artwork align="center">
-1. The zone is signed 
-2. The zone has a CDS signed by a KSK referenced in the current DS,
-   referring to a at least one key in the current DNSKEY RRset
-3. All the name-servers for the zone agree on the CDS RRset contents
-</artwork></figure>
-<t>Parents can have additional tests, defined delays, queries over TCP, and even
-ask the DNS Operator to prove they can add data to the zone, or provide a code
-that is tied to the affected zone.  The protocol is partially-synchronous,
-i.e. the server can elect to hold connection open until the operation has
-concluded or it can return that it received the request. It is up to the child
-to monitor the parent for completion of the operation and issue possible
-follow-up calls.
+<section anchor="validating-ds-add-requests" title="Validating DS Add Requests">
+<t>The parent, upon receiving a signal via this API to check the child zone for
+CDS publication, should proceed to validate the request with a series of
+tests:
+</t>
+<t>
+<list style="numbers">
+<t>the child zone MUST be signed</t>
+<t>the child zone MUST have one or more CDS or CDNSKEY records</t>
+<t>all of the name-servers in the NS RRSET for the child zone which are in the
+parent zone must agree on the CDS/CDNSKEY RRSET</t>
+<t>the CDS/CDNSKEY records MUST have an RRSIG which can be validated from the
+DS record in the parent zone if it exists, or from a CDS/CDNSKEY record if
+it does not</t>
+</list>
+</t>
+<t>If the parent and child organization do not have a previously arranged secure
+communication channel, the parent SHOULD have additional tests or conditions
+which must pass before adding DS records to the parent zone. Parents MAY
+require additional tests or conditions in any case. Some example additional
+tests and conditions are:
+</t>
+<t>
+<list style="symbols">
+<t>monitoring over an extended period before trusting new CDS records</t>
+<t>additional queries over TCP</t>
+<t>tokens added to the child zone to prove control</t>
+</list>
+</t>
+<t>The API is partially synchronous. The server can elect to allow a connection
+to remain open until the operation has completed, or it can immediately return
+acknowledgment of the request. In the latter case, it is up to the child
+operator to monitor the parent zone for completion of the operation, and issue
+possible followup requests as necessary.
 </t>
 </section>
 </section>
 
 <section anchor="op3dnsrr-restful-api" title="OP-3-DNS-RR RESTful API">
-<t>The specification of this API is minimalist, but a realistic one.  Question:
+<t>The specification of this API is minimalist, but a realistic one. Question:
 How to respond if the party contacted is not ALLOWED to make the requested
 change?
 </t>
 
 <section anchor="authentication" title="Authentication">
-<t>The API does not impose any unique server authentication requirements.  The
-server authentication provided by TLS fully addresses the needs.  In general,
+<t>The API does not impose any unique server authentication requirements. The
+server authentication provided by TLS fully addresses the needs. In general,
 for the API SHOULD be provided over TLS-protected transport (e.g., HTTPS) or
 VPN.
 </t>
@@ -246,15 +274,15 @@ VPN.
 <section anchor="authorization" title="Authorization">
 <t>Authorization is out of scope of this document. The CDS records present in the
 zone file are indications of intention to sign/unsign/update the DS records of
-the domain in the parent zone.  This means the proceeding of the action is not
-determined by who issued the request.  Therefore, authorization is out of the
-scope. Registries and registrars who plan to provide this service can,
+the domain in the parent zone. This means the proceeding of the action is not
+determined by who issued the request. Therefore, authorization is out of the
+scope. Registries and Registrars who plan to provide this service can,
 however, implement their own policy such as IP white listing, API key, etc.
 </t>
 </section>
 
 <section anchor="base-url-locator" title="Base URL Locator">
-<t>The base URL for registries or registrars who want to provide this service to
+<t>The base URL for registries or Registrars who want to provide this service to
 DNS Operators can be made auto-discoverable as an RDAP extension.
 </t>
 </section>
@@ -270,8 +298,8 @@ DNS Operators can be made auto-discoverable as an RDAP extension.
 <t>Syntax: POST /domains/{domain}/cds
 </t>
 <t>A DS record based on the CDS record in the child zone file will be inserted
-into the registry and the parent zone file upon the successful completion of
-such request. If there are multiple CDS records in the CDS RRset, multiple DS
+into the Registry and the parent zone file upon the successful completion of
+such request. If there are multiple CDS records in the CDS RRSET, multiple DS
 records will be added.
 </t>
 <t>Either the CDS/CDNSKEY or the DNSKEY can be used to create the DS record.
@@ -286,9 +314,7 @@ Note: entity expecting CDNSKEY is still expected accept the /cds command.
 <t>HTTP Status code 400 indicates a failure due to validation.</t>
 <t>HTTP Status code 403 indicates a failure due to an invalid challenge token.</t>
 <t>HTTP Status code 404 indicates the domain does not exist.</t>
-<t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.
-
-<vspace/></t>
+<t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.</t>
 </list>
 </t>
 </section>
@@ -357,14 +383,10 @@ DNSSEC initial trust.
 <section anchor="response-3" title="Response">
 <t>
 <list style="symbols">
-<t>HTTP Status code 200 indicates a success.  Token included in the body of the response,
- as a valid TXT record</t>
+<t>HTTP Status code 200 indicates a success. Token included in the body of
+ the response, as a valid TXT record</t>
 <t>HTTP Status code 404 indicates the domain does not exist.</t>
-<t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.
-
-<vspace/>
-
-<vspace/></t>
+<t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.</t>
 </list>
 </t>
 </section>
@@ -375,7 +397,7 @@ DNSSEC initial trust.
 <t>Service providers can provide a customized error message in the response body
 in addition to the HTTP status code defined in the previous section.
 </t>
-<t>This can include an Identifiying number/string that can be used to track the
+<t>This can include an identifying number/string that can be used to track the
 requests.
 </t>
 <t>#Using the definitions
@@ -413,15 +435,15 @@ transfer issues
 </middle>
 <back>
 <references title="Normative References">
-<?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-dnsop-maintain-ds-00.xml"?>
-<?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"?>
-<?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7344.xml"?>
+<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.4035.xml"?>
+<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7344.xml"?>
+<?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-dnsop-maintain-ds-01.xml"?>
 </references>
 <references title="Informative References">
-<?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ogud-dnsop-maintain-ds-00.xml"?>
-<?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
-<?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6690.xml"?>
-<?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7480.xml"?>
+<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3912.xml"?>
+<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7480.xml"?>
+<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6690.xml"?>
+<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
 </references>
 
 <section anchor="document-history" title="Document History">
