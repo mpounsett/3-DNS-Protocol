@@ -100,10 +100,10 @@ Table of Contents
    3.  Protocol Overview . . . . . . . . . . . . . . . . . . . . . .   4
      3.1.  Requiring DNSSEC  . . . . . . . . . . . . . . . . . . . .   5
      3.2.  Signalling the Parent to Add DS . . . . . . . . . . . . .   5
-     3.3.  Validating DS Add Requests  . . . . . . . . . . . . . . .   5
+     3.3.  Validating DS Add Requests  . . . . . . . . . . . . . . .   6
    4.  OP-3-DNS-RR RESTful API . . . . . . . . . . . . . . . . . . .   6
      4.1.  Authentication  . . . . . . . . . . . . . . . . . . . . .   6
-     4.2.  Authorization . . . . . . . . . . . . . . . . . . . . . .   6
+     4.2.  Authorization . . . . . . . . . . . . . . . . . . . . . .   7
      4.3.  Base URL Locator  . . . . . . . . . . . . . . . . . . . .   7
      4.4.  CDS resource  . . . . . . . . . . . . . . . . . . . . . .   7
 
@@ -119,17 +119,17 @@ Internet-Draft                  3-DNS-RRR                     March 2016
        4.4.2.  Removing a DS (turn off DNSSEC) . . . . . . . . . . .   8
        4.4.3.  DS Maintenance (Key roll over)  . . . . . . . . . . .   8
      4.5.  Tokens resource . . . . . . . . . . . . . . . . . . . . .   8
-       4.5.1.  Setup Initial Trust Establishment with Challenge  . .   8
+       4.5.1.  Setup Initial Trust Establishment with Challenge  . .   9
      4.6.  Customized Error Messages . . . . . . . . . . . . . . . .   9
      4.7.  How to react to 403 on POST cds . . . . . . . . . . . . .   9
    5.  Security considerations . . . . . . . . . . . . . . . . . . .   9
-   6.  IANA Actions  . . . . . . . . . . . . . . . . . . . . . . . .   9
-   7.  Internationalization Considerations . . . . . . . . . . . . .   9
+   6.  IANA Actions  . . . . . . . . . . . . . . . . . . . . . . . .  10
+   7.  Internationalization Considerations . . . . . . . . . . . . .  10
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  10
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .  10
      8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
-   Appendix A.  Document History . . . . . . . . . . . . . . . . . .  10
-     A.1.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  10
+   Appendix A.  Document History . . . . . . . . . . . . . . . . . .  11
+     A.1.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  11
      A.2.  Version 02  . . . . . . . . . . . . . . . . . . . . . . .  11
      A.3.  Version 01  . . . . . . . . . . . . . . . . . . . . . . .  11
      A.4.  Version 00  . . . . . . . . . . . . . . . . . . . . . . .  11
@@ -229,8 +229,11 @@ Internet-Draft                  3-DNS-RRR                     March 2016
    that infeasible.  RDAP [RFC7480], the successor to WHOIS, provides
    this standardized response however it may be some time before RDAP
    achieves wide deployment.  A simple discovery API that can be easily
-   deployed while registries and Registrars deal with the larger problem
+   deployed while Registries and Registrars deal with the larger problem
    of rolling out RDAP may be advisable.
+
+   [Editors Note (to be removed before publication): Do we want to
+   define a discovery API here?]
 
    Once the zone operator has identified the URI for the API at the
    parent, this REST-based [RFC6690] protocol may be used to submit
@@ -267,13 +270,10 @@ Internet-Draft                  3-DNS-RRR                     March 2016
    Once these records are published, the child organization can use this
    API to indicate to the parent that CDS processing should begin.
 
-3.3.  Validating DS Add Requests
 
-   The parent, upon receiving a signal via this API to check the child
-   zone for CDS publication, should proceed to validate the request with
-   a series of tests:
 
-   1.  the child zone MUST be signed
+
+
 
 
 
@@ -281,6 +281,14 @@ Latour, et al.         Expires September 22, 2016               [Page 5]
 
 Internet-Draft                  3-DNS-RRR                     March 2016
 
+
+3.3.  Validating DS Add Requests
+
+   The parent, upon receiving a signal via this API to check the child
+   zone for CDS publication, should proceed to validate the request with
+   a series of tests:
+
+   1.  the child zone MUST be signed
 
    2.  the child zone MUST have one or more CDS or CDNSKEY records
 
@@ -321,6 +329,15 @@ Internet-Draft                  3-DNS-RRR                     March 2016
 
    The API does not impose any unique server authentication
    requirements.  The server authentication provided by TLS fully
+
+
+
+
+Latour, et al.         Expires September 22, 2016               [Page 6]
+
+Internet-Draft                  3-DNS-RRR                     March 2016
+
+
    addresses the needs.  In general, for the API SHOULD be provided over
    TLS-protected transport (e.g., HTTPS) or VPN.
 
@@ -330,21 +347,13 @@ Internet-Draft                  3-DNS-RRR                     March 2016
    present in the zone file are indications of intention to sign/unsign/
    update the DS records of the domain in the parent zone.  This means
    the proceeding of the action is not determined by who issued the
-
-
-
-Latour, et al.         Expires September 22, 2016               [Page 6]
-
-Internet-Draft                  3-DNS-RRR                     March 2016
-
-
    request.  Therefore, authorization is out of the scope.  Registries
    and Registrars who plan to provide this service can, however,
    implement their own policy such as IP white listing, API key, etc.
 
 4.3.  Base URL Locator
 
-   The base URL for registries or Registrars who want to provide this
+   The base URL for Registries or Registrars who want to provide this
    service to DNS Operators can be made auto-discoverable as an RDAP
    extension.
 
@@ -377,15 +386,6 @@ Internet-Draft                  3-DNS-RRR                     March 2016
    o  HTTP Status code 403 indicates a failure due to an invalid
       challenge token.
 
-   o  HTTP Status code 404 indicates the domain does not exist.
-
-   o  HTTP Status code 500 indicates a failure due to unforeseeable
-      reasons.
-
-
-
-
-
 
 
 
@@ -393,6 +393,11 @@ Latour, et al.         Expires September 22, 2016               [Page 7]
 
 Internet-Draft                  3-DNS-RRR                     March 2016
 
+
+   o  HTTP Status code 404 indicates the domain does not exist.
+
+   o  HTTP Status code 500 indicates a failure due to unforeseeable
+      reasons.
 
 4.4.2.  Removing a DS (turn off DNSSEC)
 
@@ -433,14 +438,9 @@ Internet-Draft                  3-DNS-RRR                     March 2016
    Path: /domains/{domain}/tokens {domain}: is the domain name to be
    operated on
 
-4.5.1.  Setup Initial Trust Establishment with Challenge
 
-4.5.1.1.  Request
 
-                   Syntax: POST /domains/{domain}/tokens
 
-   A random token to be included as a _delegate TXT record prior
-   establishing the DNSSEC initial trust.
 
 
 
@@ -449,6 +449,15 @@ Latour, et al.         Expires September 22, 2016               [Page 8]
 
 Internet-Draft                  3-DNS-RRR                     March 2016
 
+
+4.5.1.  Setup Initial Trust Establishment with Challenge
+
+4.5.1.1.  Request
+
+                   Syntax: POST /domains/{domain}/tokens
+
+   A random token to be included as a _delegate TXT record prior
+   establishing the DNSSEC initial trust.
 
 4.5.1.2.  Response
 
@@ -486,15 +495,6 @@ Internet-Draft                  3-DNS-RRR                     March 2016
    risk of takeover ? risk of validation errors < declines transfer
    issues
 
-6.  IANA Actions
-
-   URI ??? TBD
-
-7.  Internationalization Considerations
-
-   This protocol is designed for machine to machine communications
-
-
 
 
 
@@ -505,6 +505,14 @@ Latour, et al.         Expires September 22, 2016               [Page 9]
 
 Internet-Draft                  3-DNS-RRR                     March 2016
 
+
+6.  IANA Actions
+
+   URI ??? TBD
+
+7.  Internationalization Considerations
+
+   This protocol is designed for machine to machine communications
 
 8.  References
 
@@ -545,14 +553,6 @@ Internet-Draft                  3-DNS-RRR                     March 2016
               10.17487/RFC7480, March 2015,
               <http://www.rfc-editor.org/info/rfc7480>.
 
-Appendix A.  Document History
-
-A.1.  Version 03
-
-   Clarified based on comments and questions from early implementors
-
-
-
 
 
 
@@ -561,6 +561,12 @@ Latour, et al.         Expires September 22, 2016              [Page 10]
 
 Internet-Draft                  3-DNS-RRR                     March 2016
 
+
+Appendix A.  Document History
+
+A.1.  Version 03
+
+   Clarified based on comments and questions from early implementors
 
 A.2.  Version 02
 
@@ -599,12 +605,6 @@ Authors' Addresses
    Rightside Group, Ltd.
 
    Email: matt@conundrum.com
-
-
-
-
-
-
 
 
 

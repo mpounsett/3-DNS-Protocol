@@ -181,8 +181,11 @@ organization, but parent discovery must be automated, and the lack of a formal
 standard for the data structure of a WHOIS response makes that infeasible.
 RDAP <xref target="RFC7480"/>, the successor to WHOIS, provides this standardized response
 however it may be some time before RDAP achieves wide deployment. A simple
-discovery API that can be easily deployed while registries and Registrars deal
+discovery API that can be easily deployed while Registries and Registrars deal
 with the larger problem of rolling out RDAP may be advisable.
+</t>
+<t>[Editors Note (to be removed before publication): Do we want to define a
+discovery API here?]
 </t>
 <t>Once the zone operator has identified the URI for the API at the parent, this
 REST-based <xref target="RFC6690"/> protocol may be used to submit requests to the parent to
@@ -282,7 +285,7 @@ however, implement their own policy such as IP white listing, API key, etc.
 </section>
 
 <section anchor="base-url-locator" title="Base URL Locator">
-<t>The base URL for registries or Registrars who want to provide this service to
+<t>The base URL for Registries or Registrars who want to provide this service to
 DNS Operators can be made auto-discoverable as an RDAP extension.
 </t>
 </section>
@@ -440,10 +443,10 @@ transfer issues
 <?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-dnsop-maintain-ds-01.xml"?>
 </references>
 <references title="Informative References">
+<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
 <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3912.xml"?>
 <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7480.xml"?>
 <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6690.xml"?>
-<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
 </references>
 
 <section anchor="document-history" title="Document History">

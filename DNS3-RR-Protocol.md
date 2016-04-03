@@ -146,8 +146,11 @@ organization, but parent discovery must be automated, and the lack of a formal
 standard for the data structure of a WHOIS response makes that infeasible.
 RDAP [@RFC7480], the successor to WHOIS, provides this standardized response
 however it may be some time before RDAP achieves wide deployment. A simple
-discovery API that can be easily deployed while registries and Registrars deal
+discovery API that can be easily deployed while Registries and Registrars deal
 with the larger problem of rolling out RDAP may be advisable.
+
+[Editors Note (to be removed before publication): Do we want to define a
+discovery API here?]
 
 Once the zone operator has identified the URI for the API at the parent, this
 REST-based [@RFC6690] protocol may be used to submit requests to the parent to
@@ -232,7 +235,7 @@ however, implement their own policy such as IP white listing, API key, etc.
 
 ## Base URL Locator
 
-The base URL for registries or Registrars who want to provide this service to
+The base URL for Registries or Registrars who want to provide this service to
 DNS Operators can be made auto-discoverable as an RDAP extension.
 
 ## CDS resource
