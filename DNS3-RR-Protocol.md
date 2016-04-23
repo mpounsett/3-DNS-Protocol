@@ -47,30 +47,19 @@
 %
 
 .# Abstract
-There are several problems that arise in the standard
-Registrant/Registrar/Registry model when the operator of a zone is neither the
-Registrant nor the Registrar for the delegation. Historically the issues have
-been minor, and limited to difficulty guiding the Registrant through the
-initial changes to the NS records for the delegation. As this is usually a
-one time activity when the operator first takes charge of the zone it has not
-been treated as a serious issue.
+There are problems that arise in the standard Registrant/Registrar/Registry
+model when the operator of a zone is neither the Registrant nor the Registrar
+for a delegation.  Originally this was limited to NS record changes which were
+most often done once at delegation time, or rarely when the operator
+reorganized their infrastructure, or the registrant moved operators.  With
+DNSSEC it becomes necessary for delegation information to be changed
+frequently, which introduces errors or critical delays as information must be
+channeled through a Registrant who is likely not technically knowledgeable. 
 
-On the other hand, when the domain is signed with DNSSEC it is necessary for
-the DS records in the parent delegation to be changed regularly in order to
-track KSK rollover. In the current model, this is subject to delays, as the
-DNS operator must get the attention of the Registrant, and is error prone, as
-the Registrant must successfully copy and paste DS data or DNSKEY data, which
-is difficult to visually compare.
+This draft describes a REST-based protocol that will allow authorized
+third-party DNS operators to make necessary operational changes to zones
+delegated to them without needing to involve the Registrant.
 
-There is a need for a simple protocol that allows a third party DNS operator
-to update DS and NS records for a delegation, in a trusted manner, without
-involving the Registrant in each operation.
-
-The protocol described in this draft is REST based, and when used through an
-authenticated channel can be used to establish the DNSSEC Initial Trust (to
-turn on DNSSEC or bootstrap DNSSEC). Once DNSSEC trust is established this
-channel can be used to trigger maintenance of delegation records such as DS,
-NS, and glue records. The protocol is kept as simple as possible.
 
 {mainmatter}
 
@@ -103,6 +92,11 @@ this draft is intended to simplify the process of updating delegation
 information, for both the Registrant and third party DNS operators, by
 enabling automation and eliminating obvious and common sources of human
 error.
+
+In addition to allowing a third party operator to properly maintain DNSSEC
+data, the protocol mitigates a much older, but less serious problem of being
+able to update delegation NS and glue records as necessary without needing to
+get the attention of the Registrant.
 
 # Notational Conventions
 
