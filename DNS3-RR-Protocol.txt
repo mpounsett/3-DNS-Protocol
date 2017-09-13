@@ -5,16 +5,16 @@
 regext                                                         J. Latour
 Internet-Draft                                                      CIRA
 Intended status: Standards Track                          O. Gudmundsson
-Expires: September 13, 2017                             Cloudflare, Inc.
+Expires: March 16, 2018                                 Cloudflare, Inc.
                                                               P. Wouters
                                                                  Red Hat
                                                              M. Pounsett
                                                    Rightside Group, Ltd.
-                                                          March 12, 2017
+                                                      September 12, 2017
 
 
        Third Party DNS operator to Registrars/Registries Protocol
-          draft-ietf-regext-dnsoperator-to-rrr-protocol-03.txt
+            draft-ietf-regext-dnsoperator-to-rrr-protocol-04
 
 Abstract
 
@@ -34,10 +34,12 @@ Abstract
    records.
 
    This document describes a simple protocol that allows a third party
-   DNS operator to update DS records for a delegation, in a trusted
-   manner, without involving the Registrant for each operation.  This
-   same protocol can be used by Registrants to maintain their own
-   domains if they wish.
+   DNS operator to: establish the initial chain of trust (bootstrap
+   DNSSEC) for a delegation; update DS records for a delegation; and,
+   remove DS records from a secure delegation.  The DNS operator may do
+   these things in a trusted manner, without involving the Registrant
+   for each operation.  This same protocol can be used by Registrants to
+   maintain their own domains if they wish.
 
 Status of This Memo
 
@@ -51,11 +53,9 @@ Status of This Memo
 
 
 
-
-
-Latour, et al.         Expires September 13, 2017               [Page 1]
+Latour, et al.           Expires March 16, 2018                 [Page 1]
 
-Internet-Draft                  3-DNS-RRR                     March 2017
+Internet-Draft                  3-DNS-RRR                 September 2017
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 13, 2017.
+   This Internet-Draft will expire on March 16, 2018.
 
 Copyright Notice
 
@@ -92,7 +92,6 @@ Table of Contents
      3.3.  Maintaining the Chain of Trust  . . . . . . . . . . . . .   5
      3.4.  Acceptance Processing . . . . . . . . . . . . . . . . . .   6
      3.5.  Bootstrapping DNSSEC  . . . . . . . . . . . . . . . . . .   6
-     3.6.  Conflict Resolution . . . . . . . . . . . . . . . . . . .   7
    4.  API Definition  . . . . . . . . . . . . . . . . . . . . . . .   7
      4.1.  Authentication  . . . . . . . . . . . . . . . . . . . . .   7
      4.2.  RESTful Resources . . . . . . . . . . . . . . . . . . . .   8
@@ -102,21 +101,21 @@ Table of Contents
    5.  Security considerations . . . . . . . . . . . . . . . . . . .  11
    6.  IANA Actions  . . . . . . . . . . . . . . . . . . . . . . . .  11
    7.  Internationalization Considerations . . . . . . . . . . . . .  11
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
      8.2.  Informative References  . . . . . . . . . . . . . . . . .  12
    Appendix A.  Document History . . . . . . . . . . . . . . . . . .  13
+     A.1.  regext Version 04 . . . . . . . . . . . . . . . . . . . .  13
 
 
 
-Latour, et al.         Expires September 13, 2017               [Page 2]
+Latour, et al.           Expires March 16, 2018                 [Page 2]
 
-Internet-Draft                  3-DNS-RRR                     March 2017
+Internet-Draft                  3-DNS-RRR                 September 2017
 
 
-     A.1.  regext Version 04 (future publication)  . . . . . . . . .  13
      A.2.  regext Version 03 . . . . . . . . . . . . . . . . . . . .  13
-     A.3.  regext Version 02 . . . . . . . . . . . . . . . . . . . .  14
+     A.3.  regext Version 02 . . . . . . . . . . . . . . . . . . . .  13
      A.4.  regext Version 01 . . . . . . . . . . . . . . . . . . . .  14
      A.5.  regext Version 00 . . . . . . . . . . . . . . . . . . . .  14
      A.6.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  14
@@ -162,15 +161,15 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    secure chain of trust that involves parties not in the traditional
    Registrant/Registrar/Registry (RRR) model, and to reduce the friction
    in maintaining DNSSEC secured delegations in these cases.  It
-
-
-
-Latour, et al.         Expires September 13, 2017               [Page 3]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    describes a REST-based [RFC6690] protocol which can be used to
+
+
+
+Latour, et al.           Expires March 16, 2018                 [Page 3]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
+
    establish DNSSEC initial trust (to enable or bootstrap DNSSEC), and
    to trigger maintenance of DS records.
 
@@ -218,15 +217,15 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    At this time, WHOIS [RFC3912] is the only widely deployed protocol to
    carry such information, but WHOIS responses are unstructured text,
    and each implementor can lay out its text responses differently.  In
-
-
-
-Latour, et al.         Expires September 13, 2017               [Page 4]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    addition, Registries may include referrals in this unstructured text
+
+
+
+Latour, et al.           Expires March 16, 2018                 [Page 4]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
+
    to the WHOIS interfaces of their Registrars, and those Registrar
    WHOIS interface in turn have their own layouts.  This presents a text
    parsing problem which is infeasible to solve.
@@ -244,7 +243,7 @@ Internet-Draft                  3-DNS-RRR                     March 2017
 
 3.2.  Establishing a Chain of Trust
 
-   After signing the zone, the child operator needs to upload the DS
+   After signing the zone, the child DNS Operator needs to upload the DS
    record(s) to the parent.  The child can signal its desire to have
    DNSSEC validation enabled by publishing one of the special DNS
    records CDS and/or CDNSKEY as defined in [RFC7344] and [RFC8078].
@@ -270,20 +269,18 @@ Internet-Draft                  3-DNS-RRR                     March 2017
 
 3.3.  Maintaining the Chain of Trust
 
-   One the secure chain of trust is established, the Registration Entity
-   SHOULD regularly scan the child zone for CDS record changes.  If the
-   Registration Entity implements the protocol described in this
-
-
-
-
-Latour, et al.         Expires September 13, 2017               [Page 5]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
+   Once the secure chain of trust is established, the Registration
+   Entity SHOULD regularly scan the child zone for CDS record changes.
+   If the Registration Entity implements the protocol described in this
    document, then it SHOULD also accept signals via this protocol to
    immediately check the child zone for CDS records.
+
+
+
+Latour, et al.           Expires March 16, 2018                 [Page 5]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
 
    Server implementations of this protocol MAY include rate limiting to
    protect their systems and the systems of child operators from abuse.
@@ -325,17 +322,20 @@ Internet-Draft                  3-DNS-RRR                     March 2017
       an attempted Man in the Middle (MITM) attack, and SHOULD reset the
       test.  This minimizes the possibility of an attacker spoofing
       responses.  An example of such a policy might be to scan all child
-      name servers in the delegation NS set every two hours for a week.
+      name servers in the delegation NS RRset every two hours for a
+      week.
 
    o  The Registration Entity SHOULD require all of the child name
-      servers in the delegation NS set to send the same response to a
+      servers in the delegation NS RRset to send the same response to a
       CDS query whether sent over TCP or UDP.
 
 
 
-Latour, et al.         Expires September 13, 2017               [Page 6]
+
+
+Latour, et al.           Expires March 16, 2018                 [Page 6]
 
-Internet-Draft                  3-DNS-RRR                     March 2017
+Internet-Draft                  3-DNS-RRR                 September 2017
 
 
    o  The Registration Entity MAY require the child zone to implement
@@ -345,17 +345,6 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    o  The Registration Entity MAY require the child operator to prove
       they can add data to the zone, for example by publishing a
       particular token.  See Section 4.2.2 below.
-
-3.6.  Conflict Resolution
-
-   A Registration Entity which accepts DS/DNSKEY updates both via CDS/
-   CDNSKEY and via an out of band update mechanism (such as EPP
-   [RFC5730]) may from time to time receive conflicting information from
-   these two channels.  The Registration Entity SHOULD prefer data
-   obtained from CDS, as the child zone operator must be trusted to know
-   best what the current state of zone signing is for the child zone.
-   The Registration Entity MUST include in its published DNSSEC policy a
-   statement describing how it will resolve such conflicts.
 
 4.  API Definition
 
@@ -385,15 +374,6 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    that the child operator intends to perform DS-record-updating
    activities (add/delete) in the parent zone.  Since this protocol is
    simply a signal to the Registration Entity that they should examine
-
-
-
-
-Latour, et al.         Expires September 13, 2017               [Page 7]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    the child zone for such intentions, additional authentication of the
    client making the request is considered unnecessary.
 
@@ -403,6 +383,16 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    ensure that a lack of additional authentication does not open up a
    denial of service mechanism against the systems of the Registration
    Entity, the Registry, or the child operator.
+
+
+
+
+
+
+Latour, et al.           Expires March 16, 2018                 [Page 7]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
 
 4.2.  RESTful Resources
 
@@ -443,13 +433,6 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    o  HTTP Status code 409 indicates the delegation already has a DS
       RRset.
 
-
-
-Latour, et al.         Expires September 13, 2017               [Page 8]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    o  HTTP Status code 429 indicates the client has been rate-limited.
 
    o  HTTP Status code 500 indicates a failure due to unforeseeable
@@ -458,6 +441,14 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    This request is for setting up initial trust in the delegation.  The
    Registration Entity SHOULD return a status code 409 if it already has
    a DS RRset for the child zone.
+
+
+
+
+Latour, et al.           Expires March 16, 2018                 [Page 8]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
 
    Upon receipt of a 403 response the child operator SHOULD issue a POST
    for the "token" resource to fetch a challenge token to insert into
@@ -498,14 +489,6 @@ Internet-Draft                  3-DNS-RRR                     March 2017
 
    Request that the Registration Entity modify the DS RRset based on the
    CDS/CDNSKEY available in the child zone.  As a result of this request
-
-
-
-Latour, et al.         Expires September 13, 2017               [Page 9]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    the Registration Entity SHOULD add or delete DS or DNSKEY records as
    indicated by the CDS/CDNSKEY RRset, but MUST NOT delete the entire DS
    RRset.
@@ -515,6 +498,13 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    o  HTTP Status code 200 indicates a success.
 
    o  HTTP Status code 400 indicates a failure due to validation.
+
+
+
+Latour, et al.           Expires March 16, 2018                 [Page 9]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
 
    o  HTTP Status code 401 indicates an unauthorized resource access.
 
@@ -555,13 +545,6 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    Note that the _delegate TXT record is publicly available and not a
    secret token.
 
-
-
-Latour, et al.         Expires September 13, 2017              [Page 10]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
 4.2.2.1.2.  Response
 
    o  HTTP Status code 200 indicates a success.  A token is included in
@@ -571,6 +554,13 @@ Internet-Draft                  3-DNS-RRR                     March 2017
 
    o  HTTP Status code 500 indicates a failure due to unforeseeable
       reasons.
+
+
+
+Latour, et al.           Expires March 16, 2018                [Page 10]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
 
 4.3.  Customized Error Messages
 
@@ -611,13 +601,6 @@ Internet-Draft                  3-DNS-RRR                     March 2017
    Clients and servers SHOULD use punycode [RFC3492] when operating on
    internationalized domain names.
 
-
-
-Latour, et al.         Expires September 13, 2017              [Page 11]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
 8.  References
 
 8.1.  Normative References
@@ -626,6 +609,14 @@ Internet-Draft                  3-DNS-RRR                     March 2017
               for Internationalized Domain Names in Applications
               (IDNA)", RFC 3492, DOI 10.17487/RFC3492, March 2003,
               <https://www.rfc-editor.org/info/rfc3492>.
+
+
+
+
+Latour, et al.           Expires March 16, 2018                [Page 11]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
 
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
@@ -666,14 +657,6 @@ Internet-Draft                  3-DNS-RRR                     March 2017
               STD 69, RFC 5730, DOI 10.17487/RFC5730, August 2009,
               <https://www.rfc-editor.org/info/rfc5730>.
 
-
-
-
-Latour, et al.         Expires September 13, 2017              [Page 12]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    [RFC7480]  Newton, A., Ellacott, B., and N. Kong, "HTTP Usage in the
               Registration Data Access Protocol (RDAP)", RFC 7480,
               DOI 10.17487/RFC7480, March 2015, <https://www.rfc-
@@ -683,9 +666,17 @@ Internet-Draft                  3-DNS-RRR                     March 2017
               Terminology", RFC 7719, DOI 10.17487/RFC7719, December
               2015, <https://www.rfc-editor.org/info/rfc7719>.
 
+
+
+
+Latour, et al.           Expires March 16, 2018                [Page 12]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
+
 Appendix A.  Document History
 
-A.1.  regext Version 04 (future publication)
+A.1.  regext Version 04
 
    o  changed uses of Registrar to Registration Entity and updated
       definitions to improve clarity
@@ -694,9 +685,6 @@ A.1.  regext Version 04 (future publication)
 
    o  added advice to scan all delegations (including insecure
       delegations) for CDS in order to bootstrap or update DNSSEC
-
-   o  added advice on EPP/CDS conflict resolution (suggestion from
-      IETF99 REGEXT meeting)
 
    o  removed "Other Delegation Maintenance" section, since we decided a
       while ago not to use this to update NS
@@ -722,14 +710,6 @@ A.2.  regext Version 03
 
    o  clarify content of POST body for 'cds' resource
 
-
-
-
-Latour, et al.         Expires September 13, 2017              [Page 13]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    o  change verb for obtaining a 'token' to GET
 
    o  Updated reference to RFC8078
@@ -740,6 +720,15 @@ A.3.  regext Version 02
       (JL)
 
    o  Text edits and clarifications.
+
+
+
+
+
+Latour, et al.           Expires March 16, 2018                [Page 13]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
+
 
 A.4.  regext Version 01
 
@@ -779,18 +768,22 @@ Authors' Addresses
    Email: jacques.latour@cira.ca
 
 
-
-
-Latour, et al.         Expires September 13, 2017              [Page 14]
-
-Internet-Draft                  3-DNS-RRR                     March 2017
-
-
    Olafur Gudmundsson
    Cloudflare, Inc.
    San Francisco, CA
 
    Email: olafur+ietf@cloudflare.com
+
+
+
+
+
+
+
+
+Latour, et al.           Expires March 16, 2018                [Page 14]
+
+Internet-Draft                  3-DNS-RRR                 September 2017
 
 
    Paul Wouters
@@ -837,4 +830,11 @@ Internet-Draft                  3-DNS-RRR                     March 2017
 
 
 
-Latour, et al.         Expires September 13, 2017              [Page 15]
+
+
+
+
+
+
+
+Latour, et al.           Expires March 16, 2018                [Page 15]

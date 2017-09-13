@@ -2,12 +2,12 @@
 % abbrev = "3-DNS-RRR" 
 % category = "std"
 % ipr="trust200902"
-% docName = "draft-ietf-regext-dnsoperator-to-rrr-protocol-03.txt"
+% docName = "draft-ietf-regext-dnsoperator-to-rrr-protocol-04"
 % workgroup = "regext"
 % area = "Applications" 
 % keyword = ["dnssec", "delegation maintenance", "trust anchors"]
 %
-% date = 2017-03-12T00:00:00Z
+% date = 2017-09-12T00:00:00Z
 %
 % [[author]]
 % fullname = "Jacques Latour"
@@ -378,7 +378,7 @@ domain names.
 
 # Document History
 
-## regext Version 04 (future publication)
+## regext Version 04
   - changed uses of Registrar to Registration Entity and updated definitions
 	to improve clarity
   - adding note about CDS/CDNSKEY interchangability in this document
