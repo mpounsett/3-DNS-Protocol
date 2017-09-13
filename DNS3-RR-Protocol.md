@@ -69,11 +69,7 @@ changes to the delegation, updating DS record(s) in order to track KSK
 rollover.  Under the current model this is prone to delays and errors, as the
 Registrant must participate in updates to DS records.
 
-This document describes a simple protocol that allows a third party DNS
-operatorto establish the initial chain of trust (bootstrap), to update DS records for a 
-delegation, to remove the secure delegation, in a trusted manner, without
-involving the Registrant for each operation. This same protocol can be used by
-Registrants to maintain their own domains if they wish.
+This document describes a simple protocol that allows a third party DNS operator to: establish the initial chain of trust (bootstrap DNSSEC) for a delegation; update DS records for a delegation; and, remove DS records from a secure delegation. The DNS operator may do these things in a trusted manner, without involving the Registrant for each operation. This same protocol can be used by Registrants to maintain their own domains if they wish.
 
 {mainmatter}
 
