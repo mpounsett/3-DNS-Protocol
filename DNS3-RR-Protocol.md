@@ -196,12 +196,6 @@ Registration Entities SHOULD require compliance with additional tests in the cas
 
  - The Registration Entity MAY require the child operator to prove they can add data to the zone, for example by publishing a particular token.  See (#token) below.
   
-## Conflict Resolution
-
-A Registration Entity which accepts DS/DNSKEY updates both via CDS/CDNSKEY and via an out of band update mechanism (such as EPP [@RFC5730]) may from time to time receive conflicting information from these two channels. The Registration Entity SHOULD prefer data obtained from out of band, as the Registrant or Registrar is the trusted entity to perform domain registration changes.  The Registration Entity MUST include in its published DNSSEC policy a statement describing how it will resolve such conflicts.
-
-The Registry MAY establish a conflict flag attribute by Registrar or by domain to determine if DS maintenance activity via this API is permitted.  In the event a conflict is detected (EPP DS change) for a domain the conflict flag may be set preventing further DS maintenance activity via this API. 
-
 # API Definition
 
 This protocol is partially synchronous, meaning the server can elect to hold
@@ -389,7 +383,6 @@ domain names.
 	to improve clarity
   - adding note about CDS/CDNSKEY interchangability in this document
   - added advice to scan all delegations (including insecure delegations) for CDS in order to bootstrap or update DNSSEC
-  - added advice on EPP/CDS conflict resolution (suggestion from IETF99 REGEXT meeting)
   - removed "Other Delegation Maintenance" section, since we decided a while ago not to use this to update NS
 
 ## regext Version 03
