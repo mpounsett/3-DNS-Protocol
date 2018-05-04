@@ -7,7 +7,7 @@
 % area = "Applications" 
 % keyword = ["dnssec", "delegation maintenance", "trust anchors"]
 %
-% date = 2017-09-12T00:00:00Z
+% date = 2018-05-04T00:00:00Z
 %
 % [[author]]
 % fullname = "Jacques Latour"
