@@ -79,16 +79,16 @@ without involving the Registrant for each operation.
 
 # Introduction
 
-After a domain has been registered, one of three parties will maintain the DNS
-zone loaded on the "primary" DNS servers: the Registrant, the Registrar, or a
-third party DNS operator.  DNS registration systems were originally designed
-around making registrations easy and fast, however after registration the
-complexity of making changes to the delegation differs for each of these
-parties.  The Registrar can make changes directly in the Registry systems
-through some API (typically EPP [@RFC5730]).  The Registrant is typically
-limited to using a web interface supplied by the Registrar or Reseller.
-Typically, a third party DNS Operator must to go through the Registrant to
-update any delegation information.
+After a domain has been registered, the DNS operator for the child zone on the
+"primary" DNS servers might be the registrant, the registrar, or a third
+party.  DNS registration systems were originally designed around making
+registrations easy and fast, however after registration the complexity of
+making changes to the delegation differs for each of these parties.  The
+Registrar can make changes directly in the Registry systems through some API
+(typically EPP [@RFC5730]).  The Registrant is typically limited to using a
+web interface supplied by the Registrar or Reseller.  Typically, a third party
+DNS Operator must to go through the Registrant to update any delegation
+information.
 
 Unless the responsible Registration Entity is scanning child zones for CDS
 records in order to bootstrap or update DNSSEC, the operator must contact and
@@ -451,6 +451,8 @@ domain names.
   - more grammar and spelling nits
   - clarify language indicating that a registrant may be a user of this
     protocol
+  - try to make it clearer that the DNS operator role may be one of several
+    different parties, without blurring the line between role and party
 
 ## regext Version 05
 
