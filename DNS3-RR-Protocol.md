@@ -130,6 +130,24 @@ to update a Registrant's zone(s) on the Registrant's behalf, it has the
 beneficial side-effect of enabling a Registrant who manages their own DNS to
 automate their operations, should they wish to do so.
 
+## Implementation Considerations
+
+In some environments the role of the Registration Entity may be split between
+parties.  For example, in some ccTLD environments Registrants may have a
+Registrar and also deal directly with the Registry on occasion.  In such
+environments it may be necessary for one Registration Entity to consider how
+to notify another of changes made to a delegation as a result of implementing
+this protocol.  This may be particularly important in cases where DNSSEC
+information can be set by a Registrar and updated by the Registry.
+
+As the specifics of the requirements in such an exchange of information are
+dependent on the protocols in use (e.g. EPP) and the details of any agreements
+between Registrar and Registry, the details are out of scope of this document.
+The issue is mentioned here merely as an indication that the parties involved
+may need to be aware of places that DNSSEC data might be stored outside of the
+DNS, and that these data may need to be updated to prevent future conflicts or
+confusion.
+
 # Notional Conventions
 
 ## Definitions
@@ -465,6 +483,7 @@ domain names.
   - since all security considerations were related to trust bootstrapping,
     offload security considerations to RFC8078
   - fix punycode reference to point to the correct (current) RFC
+  - added Implementation Considerations subsection
 
 ## regext Version 05
 
