@@ -91,25 +91,31 @@ registrations easy and fast, however after registration the complexity of
 making changes to the delegation differs for each of these parties.  The
 Registrar can make changes directly in the Registry systems through some API
 (typically EPP [@RFC5730]).  The Registrant is typically limited to using a
-web interface supplied by the Registrar or Reseller.  Typically, a third party
+web interface supplied by the Registrar or Reseller, but may be provided
+access to an API by the Registrar or Registry.  Typically, a third party
 DNS Operator must to go through the Registrant to update any delegation
 information.
 
 Unless the responsible Registration Entity is scanning child zones for CDS
-records in order to bootstrap or update DNSSEC, the operator must contact and
-engage the Registrant in updating DS records for the delegation.  New
-information must be communicated to the Registrant, who must submit that
-information to the Registrar.  Typically this involves cutting and pasting
-between email and a web interface, which is error prone.  Furthermore,
-involving Registrants in this way does not scale for even moderately sized DNS
-operators. Tracking thousands (or millions) of changes sent to customers, and
-following up if those changes are not submitted to the Registrar, or are
-submitted with errors, is itself expensive and error prone.
+records in order to bootstrap or update DNSSEC, a third-party operator must
+contact and engage the Registrant in updating DS records for the delegation.
 
-The current system does not work well, as there are many types of failures
-that have been reported at all levels in the registration model.  The failures
-result in either the inability to use DNSSEC or in validation failures that
-cause the domain to become unavailable to users behind validating resolvers.
+In this case, the existing process can result various failures that impact the
+Registrant's delegation.  New information must be communicated to the
+Registrant, who must submit that information to the Registrar.  Often this
+involves cutting and pasting between email and a web interface, which is error
+prone.  For example, a mistake with copy and paste may result in a truncated
+DS record being submitted to the parent zone, which can result in validation
+failures.  Or, a Registrant may miss or ignore email from their DNS operator
+and take no action, halting a key roll.
+
+Furthermore, involving Registrants in this way does not scale for even
+moderately sized DNS operators. Tracking thousands (or millions) of change
+requests sent to customers, and following up if those changes are not
+submitted to the Registrar, or are submitted with errors, is itself expensive
+and error prone.  The complexity results in either the inability of a DNS
+operator to implement DNSSEC or in validation failures that cause the domain
+to become unavailable to users behind validating resolvers.
 
 The goal of this document is to create a protocol for establishing a secure
 chain of trust that involves parties not in the traditional
@@ -459,6 +465,7 @@ domain names.
   - try to make it clearer that the DNS operator role may be one of several
     different parties, without blurring the line between role and party
   - restructure the abstract to lead with the goals
+  - better address potential issues with the status quo in the Introduction
 
 ## regext Version 05
 
