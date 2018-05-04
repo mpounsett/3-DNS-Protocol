@@ -195,7 +195,7 @@ record(s) to the parent.  The child can signal its desire to have DNSSEC
 validation enabled by publishing one of the special DNS records CDS and/or
 CDNSKEY as defined in [@!RFC7344] and [@!RFC8078].
 
-Registration Entities MAY regularly scan the child name servers of unsecured
+A Registration Entitiy MAY regularly scan the child name servers of unsecured
 delegations for CDS records in order to bootstrap DNSSEC, and are advised to
 do so.  At the time of publication, some ccTLD Registries are already doing
 this.  A Registration Entity that regularly scans all child zones under its
@@ -247,8 +247,8 @@ child name servers do not agree on the CDS content.
 
 ## Bootstrapping DNSSEC {#bootstrap}
 	
-Registration Entities SHOULD require compliance with additional tests in the
-case of establishing a new chain of trust.
+A Registration Entity implementing this protocol  SHOULD require compliance
+with additional tests in the case of establishing a new chain of trust.
 
  - The Registration Entity SHOULD check that all child name servers respond
    with a consistent CDS RRset for a number of queries over an extended period
@@ -301,9 +301,9 @@ Registration Entity that they should examine the child zone for such
 intentions, additional authentication of the client making the request is
 considered unnecessary.
 
-Registration Entities MAY implement their own policy to protect access to the
-API, such as with IP white listing, client TLS certificates, etc..
-Registration Entities SHOULD take steps to ensure that a lack of additional
+A Registration Entity MAY implement their own policy to protect access to the
+API, such as with IP white listing, client TLS certificates, etc..  The
+Registration Entity SHOULD take steps to ensure that a lack of additional
 authentication does not open up a denial of service mechanism against the
 systems of the Registration Entity, the Registry, or the child operator.
 
@@ -419,7 +419,7 @@ token.
 
 ## Customized Error Messages
 
-Registration Entities MAY provide a customized error message in the response
+The Registration Entity MAY provide a customized error message in the response
 body in addition to the HTTP status code defined in the previous section.
 This response MAY include an identifying number/string that can be used to
 track the request.
@@ -466,6 +466,7 @@ domain names.
     different parties, without blurring the line between role and party
   - restructure the abstract to lead with the goals
   - better address potential issues with the status quo in the Introduction
+  - removing plural Registration Entity references
 
 ## regext Version 05
 
