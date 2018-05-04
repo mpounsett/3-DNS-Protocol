@@ -412,8 +412,8 @@ The Registration Entity MAY expire the token after a reasonable period.  The
 Registration Entity SHOULD document an explanation of whether and when tokens
 are expired in their DNSSEC policy.
 
-Note that the _delegate TXT record is publicly available and not a secret
-token.
+Note that the _delegate TXT record is publicly visible and therefore cannot be
+treated as a secret token.
 
 ##### Response
    - HTTP Status code 200 indicates a success.  A token is included in the
@@ -472,6 +472,7 @@ domain names.
   - better address potential issues with the status quo in the Introduction
   - removing plural Registration Entity references
   - clarify the intent of the authentication requirements
+  - clarify the text about not having secrets in the _delegate TXT record.
 
 ## regext Version 05
 
