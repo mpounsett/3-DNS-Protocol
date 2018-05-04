@@ -370,10 +370,10 @@ This will make the delegation insecure.
 
 Syntax: PUT /domains/{domain}/cds
 
-Request that the Registration Entity modify the DS RRset based on the
-CDS/CDNSKEY available in the child zone.  As a result of this request the
-Registration Entity SHOULD add or delete DS or DNSKEY records as indicated by
-the CDS/CDNSKEY RRset, but MUST NOT delete the entire DS RRset.
+Request that the Registration Entity modify the DS RRset based on the CDS
+available in the child zone.  As a result of this request the Registration
+Entity SHOULD add or delete DS or DNSKEY records as indicated by the
+CDS RRset, but MUST NOT delete the entire DS RRset.
 
 ##### Response
    - HTTP Status code 200 indicates a success.
