@@ -288,10 +288,13 @@ intervention.
 
 ## Authentication
 
-The API does not impose any unique server authentication requirements. The
-server authentication provided by TLS fully addresses the needs of this
-protocol. The API MUST be provided over TLS-protected transport (e.g., HTTPS)
-or VPN.
+The API does not impose any unique server authentication requirements.  There
+is a potential risk for a Man in the Middle style Denial of Service attack
+against a client, where an attacker could impersonate the server and block a
+client's signal from reaching the intended recipient.  Therefore, the API MUST
+be provided over some transport which allows the client to reliably identify
+whether they have connected to the correct server, such TLS-protected
+transport (i.e. HTTPS) or VPN.
 
 Client authentication is considered out of scope of this document.  The
 publication of CDS records in the child zone is an indication that the
@@ -303,9 +306,10 @@ considered unnecessary.
 
 A Registration Entity MAY implement their own policy to protect access to the
 API, such as with IP white listing, client TLS certificates, etc..  The
-Registration Entity SHOULD take steps to ensure that a lack of additional
-authentication does not open up a denial of service mechanism against the
-systems of the Registration Entity, the Registry, or the child operator.
+Registration Entity SHOULD take steps to ensure that their implementation of
+this protocol does not open up an avenue for a denial of service attack
+against the systems of the Registration Entity, the Registry, or the child
+operator.
 
 ## RESTful Resources
 
@@ -467,6 +471,7 @@ domain names.
   - restructure the abstract to lead with the goals
   - better address potential issues with the status quo in the Introduction
   - removing plural Registration Entity references
+  - clarify the intent of the authentication requirements
 
 ## regext Version 05
 
