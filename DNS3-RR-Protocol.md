@@ -428,24 +428,13 @@ body in addition to the HTTP status code defined in the previous section.
 This response MAY include an identifying number/string that can be used to
 track the request.
 
-# Security considerations
+# Security Considerations
 
-When zones are properly provisioned, and delegations follow standards and best
-practices (e.g. [@I-D.wallstrom-dnsop-dns-delegation-requirements]), the
-Registration Entity or Registry can trust the DNS information it receives from
-multiple child name servers, over time, and/or over TCP to establish the
-initial chain of trust.
-
-In addition, the Registration Entity or Registry can require the DNS Operator
-to prove they control the zone by requiring the child operator to navigate
-additional hurdles, such as adding a challenge token to the zone.
-
-This protocol should increase the adoption of DNSSEC, enabling more zones to
-become validated thus overall the security gain outweighs the possible
-drawbacks.
-
-Registrants and DNS Operators always have the option to establish the chain of
-trust in band via the standard Registrant/Registrar/Registry model.
+Using CDS to bootstrap trust poses inherent risks.  The issues surrounding
+this practice are well described in the Security Considerations section of
+[@!RFC8078].  Since this protocol simply adds a layer of signalling on top of
+the processes described in that document, there are no new Security
+Considerations posed by using this protocol in combination with CDS.
 
 # IANA Actions
 
@@ -473,6 +462,8 @@ domain names.
   - removing plural Registration Entity references
   - clarify the intent of the authentication requirements
   - clarify the text about not having secrets in the _delegate TXT record.
+  - since all security considerations were related to trust bootstrapping,
+    offload security considerations to RFC8078
 
 ## regext Version 05
 
