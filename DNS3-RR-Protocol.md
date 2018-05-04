@@ -73,8 +73,7 @@ This document describes a simple protocol that allows a third party DNS
 operator to: establish the initial chain of trust (bootstrap DNSSEC) for a
 delegation; update DS records for a delegation; and, remove DS records from a
 secure delegation. The DNS operator may do these things in a trusted manner,
-without involving the Registrant for each operation. This same protocol can be
-used by Registrants to maintain their own domains if they wish.
+without involving the Registrant for each operation. 
 
 {mainmatter}
 
@@ -114,6 +113,11 @@ maintaining DNSSEC secured delegations in these cases.  It describes a
 REST-based [@!RFC6690] protocol which can be used to establish DNSSEC initial
 trust (to enable or bootstrap DNSSEC), and to trigger maintenance of DS
 records.
+
+Note that, while the protocol's intent is to enable a third party DNS operator
+to update a Registrant's zone(s) on the Registrant's behalf, it has the
+beneficial side-effect of enabling a Registrant who manages their own DNS to
+automate their operations, should they wish to do so.
 
 # Notional Conventions
 
@@ -441,6 +445,11 @@ domain names.
 {backmatter}
 
 # Document History
+
+## regext Version 06 (not yet published)
+
+  - clarify language indicating that a registrant may be a user of this
+    protocol
 
 ## regext Version 05
 
