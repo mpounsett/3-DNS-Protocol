@@ -443,7 +443,7 @@ This document has no actions for IANA
 # Internationalization Considerations
 
 This protocol is designed for machine to machine communications.  Clients and
-servers SHOULD use punycode [@!RFC3492] when operating on internationalized
+servers SHOULD use punycode [@!RFC5891] when operating on internationalized
 domain names.
 
 {backmatter}
@@ -464,6 +464,7 @@ domain names.
   - clarify the text about not having secrets in the _delegate TXT record.
   - since all security considerations were related to trust bootstrapping,
     offload security considerations to RFC8078
+  - fix punycode reference to point to the correct (current) RFC
 
 ## regext Version 05
 
