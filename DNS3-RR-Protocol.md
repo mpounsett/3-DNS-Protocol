@@ -2,7 +2,7 @@
 % abbrev = "3-DNS-RRR" 
 % category = "std"
 % ipr="trust200902"
-% docName = "draft-ietf-regext-dnsoperator-to-rrr-protocol-04"
+% docName = "draft-ietf-regext-dnsoperator-to-rrr-protocol-05"
 % workgroup = "regext"
 % area = "Applications" 
 % keyword = ["dnssec", "delegation maintenance", "trust anchors"]
@@ -46,7 +46,7 @@
 % fullname="Matthew Pounsett"
 % initials="M."
 % surname="Pounsett"
-% organization="Rightside Group, Ltd."
+% organization="Nimbus Operations Inc."
 %  [author.address]
 %  email="matt@conundrum.com"
 %  [author.address.postal]
@@ -377,6 +377,11 @@ domain names.
 {backmatter}
 
 # Document History
+
+## regext Version 05
+
+  - new version to keep the draft alive
+  - updating author organization
 
 ## regext Version 04
   - changed uses of Registrar to Registration Entity and updated definitions
