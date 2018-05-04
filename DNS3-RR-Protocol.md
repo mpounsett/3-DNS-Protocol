@@ -69,15 +69,38 @@ changes to the delegation, updating DS record(s) in order to track KSK
 rollover.  Under the current model this is prone to delays and errors, as the
 Registrant must participate in updates to DS records.
 
-This document describes a simple protocol that allows a third party DNS operator to: establish the initial chain of trust (bootstrap DNSSEC) for a delegation; update DS records for a delegation; and, remove DS records from a secure delegation. The DNS operator may do these things in a trusted manner, without involving the Registrant for each operation. This same protocol can be used by Registrants to maintain their own domains if they wish.
+This document describes a simple protocol that allows a third party DNS
+operator to: establish the initial chain of trust (bootstrap DNSSEC) for a
+delegation; update DS records for a delegation; and, remove DS records from a
+secure delegation. The DNS operator may do these things in a trusted manner,
+without involving the Registrant for each operation. This same protocol can be
+used by Registrants to maintain their own domains if they wish.
 
 {mainmatter}
 
 # Introduction
 
-After a domain has been registered, one of three parties will maintain the DNS zone loaded on the "primary" DNS servers: the Registrant, the Registrar, or a third party DNS operator.  DNS registration systems were originally designed around making registrations easy and fast, however after registration the complexity of making changes to the delegation differs for each of these parties.  The Registrar can make changes directly in the Registry systems through some API (typically EPP [@RFC5730]).  The Registrant is typically limited to using a web interface supplied by the Registrar or Reseller.  Typically, a third party DNS Operator must to go through the Registrant to update any delegation information.
+After a domain has been registered, one of three parties will maintain the DNS
+zone loaded on the "primary" DNS servers: the Registrant, the Registrar, or a
+third party DNS operator.  DNS registration systems were originally designed
+around making registrations easy and fast, however after registration the
+complexity of making changes to the delegation differs for each of these
+parties.  The Registrar can make changes directly in the Registry systems
+through some API (typically EPP [@RFC5730]).  The Registrant is typically
+limited to using a web interface supplied by the Registrar or Reseller.
+Typically, a third party DNS Operator must to go through the Registrant to
+update any delegation information.
 
-Unless the responsible Registration Entity is scanning child zones for CDS records in order to bootstrap or update DNSSEC, the operator must contact and engage the Registrant in updating DS records for the delegation.  New information must be communicated to the Registrant, who must submit that information to the Registrar.  Typically this involves cutting and pasting between email and a web interface, which is error prone.  Furthermore, involving Registrants in this way does not scale for even moderately sized DNS operators. Tracking thousands (or millions) of changes sent to customers, and following up if those changes are not submitted to the Registrar, or are submitted with errors, is itself expensive and error prone.
+Unless the responsible Registration Entity is scanning child zones for CDS
+records in order to bootstrap or update DNSSEC, the operator must contact and
+engage the Registrant in updating DS records for the delegation.  New
+information must be communicated to the Registrant, who must submit that
+information to the Registrar.  Typically this involves cutting and pasting
+between email and a web interface, which is error prone.  Furthermore,
+involving Registrants in this way does not scale for even moderately sized DNS
+operators. Tracking thousands (or millions) of changes sent to customers, and
+following up if those changes are not submitted to the Registrar, or are
+submitted with errors, is itself expensive and error prone.
 
 The current system does not work well, as there are many types of failures
 that have been reported at all levels in the registration model.  The failures
@@ -113,7 +136,10 @@ Registry.  Even in cases where a Registrar is involved, this term may still
 apply to a Registry if that Registry normally accepts DS/DNSKEY updates
 directly from Registrants.
 
-The CDS and CDNSKEY DNS resource records, having substantially the same function but for different record types, are used interchangably in this document.  Unless otherwise noted, any use of "CDS" or "CDNSKEY" can be assumed to also refer to the other.
+The CDS and CDNSKEY DNS resource records, having substantially the same
+function but for different record types, are used interchangably in this
+document.  Unless otherwise noted, any use of "CDS" or "CDNSKEY" can be
+assumed to also refer to the other.
 
 ## RFC2119 Keywords
 
@@ -149,20 +175,36 @@ Registry.
 
 ## Establishing a Chain of Trust
 
-After signing the zone, the child DNS Operator needs to upload the DS record(s) to
-the parent.  The child can signal its desire to have DNSSEC validation enabled
-by publishing one of the special DNS records CDS and/or CDNSKEY as defined in
-[@!RFC7344] and [@!RFC8078].
+After signing the zone, the child DNS Operator needs to upload the DS
+record(s) to the parent.  The child can signal its desire to have DNSSEC
+validation enabled by publishing one of the special DNS records CDS and/or
+CDNSKEY as defined in [@!RFC7344] and [@!RFC8078].
 
-Registration Entities MAY regularly scan the child name servers of unsecured delegations for CDS records in order to bootstrap DNSSEC, and are advised to do so.  At the time of publication, some ccTLD Registries are already doing this.  A Registration Entity that regularly scans all child zones under its responsibility (both secured and unsecured) for CDS will not require the API described in this document.  However, such a Registration Entity should follow the guidelines discussed in (#bootstrap) below when using CDS to bootstrap DNSSEC on a previously unsecured delegation.
+Registration Entities MAY regularly scan the child name servers of unsecured
+delegations for CDS records in order to bootstrap DNSSEC, and are advised to
+do so.  At the time of publication, some ccTLD Registries are already doing
+this.  A Registration Entity that regularly scans all child zones under its
+responsibility (both secured and unsecured) for CDS will not require the API
+described in this document.  However, such a Registration Entity should follow
+the guidelines discussed in (#bootstrap) below when using CDS to bootstrap
+DNSSEC on a previously unsecured delegation.
 
-In the case where the Registration Entity is not normally scanning child zones for CDS records, the Registration Entity SHOULD implement the API from this document, allowing child operators to notify the Registration Entity to begin such a scan.
+In the case where the Registration Entity is not normally scanning child zones
+for CDS records, the Registration Entity SHOULD implement the API from this
+document, allowing child operators to notify the Registration Entity to begin
+such a scan.
 
-Once the Registration Entity finds CDS records in a child zone it is responsible for, or receives a signal via this API, it SHOULD start acceptance processing as described below.
+Once the Registration Entity finds CDS records in a child zone it is
+responsible for, or receives a signal via this API, it SHOULD start acceptance
+processing as described below.
 
 ## Maintaining the Chain of Trust
 
-Once the secure chain of trust is established, the Registration Entity SHOULD regularly scan the child zone for CDS record changes.  If the Registration Entity implements the protocol described in this document, then it SHOULD also accept signals via this protocol to immediately check the child zone for CDS records.
+Once the secure chain of trust is established, the Registration Entity SHOULD
+regularly scan the child zone for CDS record changes.  If the Registration
+Entity implements the protocol described in this document, then it SHOULD also
+accept signals via this protocol to immediately check the child zone for CDS
+records.
 
 Server implementations of this protocol MAY include rate limiting to protect
 their systems and the systems of child operators from abuse.
@@ -177,25 +219,43 @@ that the child desires to have its delegation updated, SHOULD run a series of
 tests to ensure that updating the parent zone will not create or exacerbate
 any problems with the child zone. The basic tests SHOULD include:
 
-  - checks that the child zone is is properly signed as per the Registration Entity and parent DNSSEC policies
-  - if updating the DS record, a check to ensure the child CDS RRset references a KSK which is present in the child DNSKEY RRset and signs the CDS RRset
-  - ensuring all name servers in the apex NS RRset of the child zone agree on the apex NS RRset and CDS RRset contents
+  - checks that the child zone is is properly signed as per the Registration
+    Entity and parent DNSSEC policies
+  - if updating the DS record, a check to ensure the child CDS RRset
+    references a KSK which is present in the child DNSKEY RRset and signs the
+    CDS RRset
+  - ensuring all name servers in the apex NS RRset of the child zone agree on
+    the apex NS RRset and CDS RRset contents
 
 The Registration Entity SHOULD NOT make any changes to the DS RRset if the
 child name servers do not agree on the CDS content.
 
 ## Bootstrapping DNSSEC {#bootstrap}
 	
-Registration Entities SHOULD require compliance with additional tests in the case of establishing a new chain of trust.
+Registration Entities SHOULD require compliance with additional tests in the
+case of establishing a new chain of trust.
 
- - The Registration Entity SHOULD check that all child name servers respond with a consistent CDS RRset for a number of queries over an extended period of time.  Any change in DS response or inconsistency between child responses in that time might indicate an attempted Man in the Middle (MITM) attack, and SHOULD reset the test.  This minimizes the possibility of an attacker spoofing responses.  An example of such a policy might be to scan all child name servers in the delegation NS RRset every two hours for a week.
+ - The Registration Entity SHOULD check that all child name servers respond
+   with a consistent CDS RRset for a number of queries over an extended period
+   of time.  Any change in DS response or inconsistency between child
+   responses in that time might indicate an attempted Man in the Middle (MITM)
+   attack, and SHOULD reset the test.  This minimizes the possibility of an
+   attacker spoofing responses.  An example of such a policy might be to scan
+   all child name servers in the delegation NS RRset every two hours for a
+   week.
 
- - The Registration Entity SHOULD require all of the child name servers in the delegation NS RRset to send the same response to a CDS query whether sent over TCP or UDP.
+ - The Registration Entity SHOULD require all of the child name servers in the
+   delegation NS RRset to send the same response to a CDS query whether sent
+   over TCP or UDP.
 
- - The Registration Entity MAY require the child zone to implement zone delegation best practices as described in [@I-D.wallstrom-dnsop-dns-delegation-requirements].
+ - The Registration Entity MAY require the child zone to implement zone
+   delegation best practices as described in
+   [@I-D.wallstrom-dnsop-dns-delegation-requirements].
 
- - The Registration Entity MAY require the child operator to prove they can add data to the zone, for example by publishing a particular token.  See (#token) below.
-  
+ - The Registration Entity MAY require the child operator to prove they can
+   add data to the zone, for example by publishing a particular token.  See
+   (#token) below.
+
 # API Definition
 
 This protocol is partially synchronous, meaning the server can elect to hold
@@ -258,7 +318,8 @@ NOT reject nonempty requests.
    - HTTP Status code 201 indicates a success.
    - HTTP Status code 400 indicates a failure due to validation.
    - HTTP Status code 401 indicates an unauthorized resource access.
-   - HTTP Status code 403 indicates a failure due to an invalid challenge token.
+   - HTTP Status code 403 indicates a failure due to an invalid challenge
+     token.
    - HTTP Status code 404 indicates the domain does not exist.
    - HTTP Status code 409 indicates the delegation already has a DS RRset.
    - HTTP Status code 429 indicates the client has been rate-limited.
@@ -294,7 +355,10 @@ This will make the delegation insecure.
 
 Syntax: PUT /domains/{domain}/cds
 
-Request that the Registration Entity modify the DS RRset based on the CDS/CDNSKEY available in the child zone.  As a result of this request the Registration Entity SHOULD add or delete DS or DNSKEY records as indicated by the CDS/CDNSKEY RRset, but MUST NOT delete the entire DS RRset.
+Request that the Registration Entity modify the DS RRset based on the
+CDS/CDNSKEY available in the child zone.  As a result of this request the
+Registration Entity SHOULD add or delete DS or DNSKEY records as indicated by
+the CDS/CDNSKEY RRset, but MUST NOT delete the entire DS RRset.
 
 ##### Response
    - HTTP Status code 200 indicates a success.
@@ -387,8 +451,10 @@ domain names.
   - changed uses of Registrar to Registration Entity and updated definitions
 	to improve clarity
   - adding note about CDS/CDNSKEY interchangability in this document
-  - added advice to scan all delegations (including insecure delegations) for CDS in order to bootstrap or update DNSSEC
-  - removed "Other Delegation Maintenance" section, since we decided a while ago not to use this to update NS
+  - added advice to scan all delegations (including insecure delegations) for
+    CDS in order to bootstrap or update DNSSEC
+  - removed "Other Delegation Maintenance" section, since we decided a while
+    ago not to use this to update NS
 
 ## regext Version 03
   - simplify abstract
