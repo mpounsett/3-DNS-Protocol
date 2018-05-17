@@ -486,7 +486,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  HTTP Status code 404 indicates the domain does not exist.
 
-   o  HTTP Status code 409 indicates the delegation already has a DS
+   o  HTTP Status code 412 indicates the delegation already has a DS
       RRset.
 
    o  HTTP Status code 429 indicates the client has been rate-limited.
@@ -495,7 +495,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
       reasons.
 
    This request is for setting up initial trust in the delegation.  The
-   Registration Entity SHOULD return a status code 409 if it already has
+   Registration Entity SHOULD return a status code 412 if it already has
    a DS RRset for the child zone.
 
 
@@ -747,6 +747,8 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  added Implementation Considerations subsection
 
+   o  change HTTP response 409 to 412 for consistency
+
 A.2.  regext Version 05
 
    o  new version to keep the draft alive
@@ -777,14 +779,14 @@ A.4.  regext Version 03
 
    o  expanded on Internationalization Considerations
 
-   o  corrected informative/normative document references
-
 
 
 Latour, et al.          Expires November 5, 2018               [Page 14]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   o  corrected informative/normative document references
 
    o  clarify parent/Registrar references in the draft
 
@@ -829,8 +831,6 @@ A.10.  Version 01
 
    o  This version adds a full REST definition this is based on
       suggestions from Jakob Schlyter.
-
-
 
 
 

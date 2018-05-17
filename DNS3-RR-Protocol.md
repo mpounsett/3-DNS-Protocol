@@ -358,12 +358,12 @@ NOT reject nonempty requests.
    - HTTP Status code 403 indicates a failure due to an invalid challenge
      token.
    - HTTP Status code 404 indicates the domain does not exist.
-   - HTTP Status code 409 indicates the delegation already has a DS RRset.
+   - HTTP Status code 412 indicates the delegation already has a DS RRset.
    - HTTP Status code 429 indicates the client has been rate-limited.
    - HTTP Status code 500 indicates a failure due to unforeseeable reasons.
 
 This request is for setting up initial trust in the delegation.  The
-Registration Entity SHOULD return a status code 409 if it already has a DS
+Registration Entity SHOULD return a status code 412 if it already has a DS
 RRset for the child zone.
 
 Upon receipt of a 403 response the child operator SHOULD issue a POST for the
@@ -484,6 +484,7 @@ domain names.
     offload security considerations to RFC8078
   - fix punycode reference to point to the correct (current) RFC
   - added Implementation Considerations subsection
+  - change HTTP response 409 to 412 for consistency
 
 ## regext Version 05
 
