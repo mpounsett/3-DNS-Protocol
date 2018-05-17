@@ -99,13 +99,13 @@ Table of Contents
      3.4.  Acceptance Processing . . . . . . . . . . . . . . . . . .   7
      3.5.  Bootstrapping DNSSEC  . . . . . . . . . . . . . . . . . .   7
    4.  API Definition  . . . . . . . . . . . . . . . . . . . . . . .   8
-     4.1.  Authentication  . . . . . . . . . . . . . . . . . . . . .   8
-     4.2.  RESTful Resources . . . . . . . . . . . . . . . . . . . .   8
-       4.2.1.  CDS resource  . . . . . . . . . . . . . . . . . . . .   9
-       4.2.2.  Token resource  . . . . . . . . . . . . . . . . . . .  11
-     4.3.  Customized Error Messages . . . . . . . . . . . . . . . .  12
+     4.1.  Authorization . . . . . . . . . . . . . . . . . . . . . .   8
+     4.2.  Authentication  . . . . . . . . . . . . . . . . . . . . .   8
+     4.3.  RESTful Resources . . . . . . . . . . . . . . . . . . . .   8
+       4.3.1.  CDS resource  . . . . . . . . . . . . . . . . . . . .   9
+       4.3.2.  Token resource  . . . . . . . . . . . . . . . . . . .  11
+     4.4.  Customized Error Messages . . . . . . . . . . . . . . . .  12
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
-   6.  IANA Actions  . . . . . . . . . . . . . . . . . . . . . . . .  12
 
 
 
@@ -114,6 +114,7 @@ Latour, et al.          Expires November 5, 2018                [Page 2]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
+   6.  IANA Actions  . . . . . . . . . . . . . . . . . . . . . . . .  12
    7.  Internationalization Considerations . . . . . . . . . . . . .  12
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
@@ -122,13 +123,13 @@ Internet-Draft                  3-DNS-RRR                       May 2018
      A.1.  regext Version 06 (not yet published) . . . . . . . . . .  13
      A.2.  regext Version 05 . . . . . . . . . . . . . . . . . . . .  14
      A.3.  regext Version 04 . . . . . . . . . . . . . . . . . . . .  14
-     A.4.  regext Version 03 . . . . . . . . . . . . . . . . . . . .  14
+     A.4.  regext Version 03 . . . . . . . . . . . . . . . . . . . .  15
      A.5.  regext Version 02 . . . . . . . . . . . . . . . . . . . .  15
      A.6.  regext Version 01 . . . . . . . . . . . . . . . . . . . .  15
      A.7.  regext Version 00 . . . . . . . . . . . . . . . . . . . .  15
-     A.8.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  15
-     A.9.  Version 02  . . . . . . . . . . . . . . . . . . . . . . .  15
-     A.10. Version 01  . . . . . . . . . . . . . . . . . . . . . . .  15
+     A.8.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  16
+     A.9.  Version 02  . . . . . . . . . . . . . . . . . . . . . . .  16
+     A.10. Version 01  . . . . . . . . . . . . . . . . . . . . . . .  16
      A.11. Version 00  . . . . . . . . . . . . . . . . . . . . . . .  16
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
@@ -161,7 +162,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    submitted to the parent zone, which can result in validation
    failures.  Or, a Registrant may miss or ignore email from their DNS
    operator and take no action, halting a key roll.
-
 
 
 
@@ -396,18 +396,21 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  The Registration Entity MAY require the child operator to prove
       they can add data to the zone, for example by publishing a
-      particular token.  See Section 4.2.2 below.
+      particular token.  See Section 4.3.2 below.
 
 4.  API Definition
 
-   Clients may be denied access to change the DS records for domains
-   that are Registry Locked (HTTP Status code 401).  Registry Lock is a
-   mechanism provided by certain Registries or Registrars that prevents
-   domain hijacking by ensuring no attributes of the domain are
-   changeable, and no transfer or deletion transactions can be processed
-   against the domain name without manual intervention.
+4.1.  Authorization
 
-4.1.  Authentication
+   Clients may be denied access to change the DS records for domains
+   that are subject to certain registration-related locks (HTTP Status
+   code 401).  For example, the Registry Lock is a mechanism provided by
+   certain Registries or Registrars that prevents domain hijacking by
+   ensuring no attributes of the domain are changeable, and no transfer
+   or deletion transactions can be processed against the domain name
+   without manual intervention.
+
+4.2.  Authentication
 
    The API does not impose any unique server authentication
    requirements.  There is a potential risk for a Man in the Middle
@@ -433,13 +436,10 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    avenue for a denial of service attack against the systems of the
    Registration Entity, the Registry, or the child operator.
 
-4.2.  RESTful Resources
+4.3.  RESTful Resources
 
    In the following text, "{domain}" is the child zone to be operated
    on.
-
-
-
 
 
 
@@ -450,13 +450,13 @@ Latour, et al.          Expires November 5, 2018                [Page 8]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-4.2.1.  CDS resource
+4.3.1.  CDS resource
 
    Path: /domains/{domain}/cds
 
-4.2.1.1.  Establishing Initial Trust (Enabling DNSSEC)
+4.3.1.1.  Establishing Initial Trust (Enabling DNSSEC)
 
-4.2.1.1.1.  Request
+4.3.1.1.1.  Request
 
    Syntax: POST /domains/{domain}/cds
 
@@ -468,7 +468,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    The body of the POST SHOULD be empty, however server implementations
    SHOULD NOT reject nonempty requests.
 
-4.2.1.1.2.  Response
+4.3.1.1.2.  Response
 
    o  HTTP Status code 201 indicates a success.
 
@@ -506,9 +506,9 @@ Latour, et al.          Expires November 5, 2018                [Page 9]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-4.2.1.2.  Removing DS Records
+4.3.1.2.  Removing DS Records
 
-4.2.1.2.1.  Request
+4.3.1.2.1.  Request
 
    Syntax: DELETE /domains/{domain}/cds
 
@@ -516,7 +516,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    record in the child zone, indicating a request that the entire DS
    RRset be removed.  This will make the delegation insecure.
 
-4.2.1.2.2.  Response
+4.3.1.2.2.  Response
 
    o  HTTP Status code 200 indicates a success.
 
@@ -533,9 +533,9 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    o  HTTP Status code 500 indicates a failure due to unforeseeable
       reasons.
 
-4.2.1.3.  Modifying DS Records
+4.3.1.3.  Modifying DS Records
 
-4.2.1.3.1.  Request
+4.3.1.3.1.  Request
 
    Syntax: PUT /domains/{domain}/cds
 
@@ -544,7 +544,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Registration Entity SHOULD add or delete DS or DNSKEY records as
    indicated by the CDS RRset, but MUST NOT delete the entire DS RRset.
 
-4.2.1.3.2.  Response
+4.3.1.3.2.  Response
 
    o  HTTP Status code 200 indicates a success.
 
@@ -569,13 +569,13 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    o  HTTP Status code 500 indicates a failure due to unforeseeable
       reasons.
 
-4.2.2.  Token resource
+4.3.2.  Token resource
 
    Path: /domains/{domain}/token
 
-4.2.2.1.  Establish Initial Trust with Challenge
+4.3.2.1.  Establish Initial Trust with Challenge
 
-4.2.2.1.1.  Request
+4.3.2.1.1.  Request
 
    Syntax: GET /domains/{domain}/token
 
@@ -597,7 +597,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Note that the _delegate TXT record is publicly visible and therefore
    cannot be treated as a secret token.
 
-4.2.2.1.2.  Response
+4.3.2.1.2.  Response
 
    o  HTTP Status code 200 indicates a success.  A token is included in
       the body of the response, as a valid TXT record
@@ -618,7 +618,7 @@ Latour, et al.          Expires November 5, 2018               [Page 11]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-4.3.  Customized Error Messages
+4.4.  Customized Error Messages
 
    The Registration Entity MAY provide a customized error message in the
    response body in addition to the HTTP status code defined in the
@@ -751,6 +751,11 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  remove synchronous vs. asynchronous text
 
+   o  rephrase registry lock text to make it an example rather than an
+      exhaustive list of why a 401 may be returned
+
+   o  for above, add Authorization subsection
+
 A.2.  regext Version 05
 
    o  new version to keep the draft alive
@@ -770,6 +775,17 @@ A.3.  regext Version 04
    o  removed "Other Delegation Maintenance" section, since we decided a
       while ago not to use this to update NS
 
+
+
+
+
+
+
+Latour, et al.          Expires November 5, 2018               [Page 14]
+
+Internet-Draft                  3-DNS-RRR                       May 2018
+
+
 A.4.  regext Version 03
 
    o  simplify abstract
@@ -778,13 +794,6 @@ A.4.  regext Version 03
 
    o  added HTTP response codes for rate limiting (429), missing DS
       RRsets (412)
-
-
-
-Latour, et al.          Expires November 5, 2018               [Page 14]
-
-Internet-Draft                  3-DNS-RRR                       May 2018
-
 
    o  expanded on Internationalization Considerations
 
@@ -821,6 +830,18 @@ A.7.  regext Version 00
 
    o  Working group document same as 03, just track changed to standard
 
+
+
+
+
+
+
+
+Latour, et al.          Expires November 5, 2018               [Page 15]
+
+Internet-Draft                  3-DNS-RRR                       May 2018
+
+
 A.8.  Version 03
 
    o  Clarified based on comments and questions from early implementors
@@ -833,14 +854,6 @@ A.10.  Version 01
 
    o  This version adds a full REST definition this is based on
       suggestions from Jakob Schlyter.
-
-
-
-
-Latour, et al.          Expires November 5, 2018               [Page 15]
-
-Internet-Draft                  3-DNS-RRR                       May 2018
-
 
 A.11.  Version 00
 
@@ -874,19 +887,6 @@ Authors' Addresses
    Toronto, ON
 
    Email: matt@conundrum.com
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

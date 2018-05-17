@@ -291,12 +291,14 @@ with additional tests in the case of establishing a new chain of trust.
 
 # API Definition
 
+## Authorization
+
 Clients may be denied access to change the DS records for domains that are
-Registry Locked (HTTP Status code 401).  Registry Lock is a mechanism
-provided by certain Registries or Registrars that prevents domain hijacking by
-ensuring no attributes of the domain are changeable, and no transfer or
-deletion transactions can be processed against the domain name without manual
-intervention.
+subject to certain registration-related locks (HTTP Status code 401).  For
+example, the Registry Lock is a mechanism provided by certain Registries or
+Registrars that prevents domain hijacking by ensuring no attributes of the
+domain are changeable, and no transfer or deletion transactions can be
+processed against the domain name without manual intervention.
 
 ## Authentication
 
@@ -480,6 +482,9 @@ domain names.
   - added Implementation Considerations subsection
   - change HTTP response 409 to 412 for consistency
   - remove synchronous vs. asynchronous text
+  - rephrase registry lock text to make it an example rather than an
+    exhaustive list of why a 401 may be returned
+  - for above, add Authorization subsection
 
 ## regext Version 05
 
