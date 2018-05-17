@@ -291,12 +291,6 @@ with additional tests in the case of establishing a new chain of trust.
 
 # API Definition
 
-This protocol is partially synchronous, meaning the server can elect to hold
-connections open until operations have completed, or it can return a status
-code indicating that it has received a request, and close the connection.  It
-is up to the child to monitor the parent for completion of the operation, and
-issue possible follow-up calls to the Registration Entity.
-
 Clients may be denied access to change the DS records for domains that are
 Registry Locked (HTTP Status code 401).  Registry Lock is a mechanism
 provided by certain Registries or Registrars that prevents domain hijacking by
@@ -485,6 +479,7 @@ domain names.
   - fix punycode reference to point to the correct (current) RFC
   - added Implementation Considerations subsection
   - change HTTP response 409 to 412 for consistency
+  - remove synchronous vs. asynchronous text
 
 ## regext Version 05
 

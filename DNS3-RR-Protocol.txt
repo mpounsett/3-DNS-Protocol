@@ -100,7 +100,7 @@ Table of Contents
      3.5.  Bootstrapping DNSSEC  . . . . . . . . . . . . . . . . . .   7
    4.  API Definition  . . . . . . . . . . . . . . . . . . . . . . .   8
      4.1.  Authentication  . . . . . . . . . . . . . . . . . . . . .   8
-     4.2.  RESTful Resources . . . . . . . . . . . . . . . . . . . .   9
+     4.2.  RESTful Resources . . . . . . . . . . . . . . . . . . . .   8
        4.2.1.  CDS resource  . . . . . . . . . . . . . . . . . . . .   9
        4.2.2.  Token resource  . . . . . . . . . . . . . . . . . . .  11
      4.3.  Customized Error Messages . . . . . . . . . . . . . . . .  12
@@ -400,13 +400,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 4.  API Definition
 
-   This protocol is partially synchronous, meaning the server can elect
-   to hold connections open until operations have completed, or it can
-   return a status code indicating that it has received a request, and
-   close the connection.  It is up to the child to monitor the parent
-   for completion of the operation, and issue possible follow-up calls
-   to the Registration Entity.
-
    Clients may be denied access to change the DS records for domains
    that are Registry Locked (HTTP Status code 401).  Registry Lock is a
    mechanism provided by certain Registries or Registrars that prevents
@@ -440,6 +433,13 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    avenue for a denial of service attack against the systems of the
    Registration Entity, the Registry, or the child operator.
 
+4.2.  RESTful Resources
+
+   In the following text, "{domain}" is the child zone to be operated
+   on.
+
+
+
 
 
 
@@ -449,11 +449,6 @@ Latour, et al.          Expires November 5, 2018                [Page 8]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
-
-4.2.  RESTful Resources
-
-   In the following text, "{domain}" is the child zone to be operated
-   on.
 
 4.2.1.  CDS resource
 
@@ -498,6 +493,11 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Registration Entity SHOULD return a status code 412 if it already has
    a DS RRset for the child zone.
 
+   Upon receipt of a 403 response the child operator SHOULD issue a POST
+   for the "token" resource to fetch a challenge token to insert into
+   the zone.
+
+
 
 
 
@@ -505,10 +505,6 @@ Latour, et al.          Expires November 5, 2018                [Page 9]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
-
-   Upon receipt of a 403 response the child operator SHOULD issue a POST
-   for the "token" resource to fetch a challenge token to insert into
-   the zone.
 
 4.2.1.2.  Removing DS Records
 
@@ -554,6 +550,10 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  HTTP Status code 400 indicates a failure due to validation.
 
+   o  HTTP Status code 401 indicates an unauthorized resource access.
+
+   o  HTTP Status code 404 indicates the domain does not exist.
+
 
 
 
@@ -561,10 +561,6 @@ Latour, et al.          Expires November 5, 2018               [Page 10]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
-
-   o  HTTP Status code 401 indicates an unauthorized resource access.
-
-   o  HTTP Status code 404 indicates the domain does not exist.
 
    o  HTTP Status code 412 indicates the parent does not have a DS RRset
 
@@ -610,6 +606,10 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  HTTP Status code 500 indicates a failure due to unforeseeable
       reasons.
+
+
+
+
 
 
 
@@ -749,6 +749,8 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  change HTTP response 409 to 412 for consistency
 
+   o  remove synchronous vs. asynchronous text
+
 A.2.  regext Version 05
 
    o  new version to keep the draft alive
@@ -777,14 +779,14 @@ A.4.  regext Version 03
    o  added HTTP response codes for rate limiting (429), missing DS
       RRsets (412)
 
-   o  expanded on Internationalization Considerations
-
 
 
 Latour, et al.          Expires November 5, 2018               [Page 14]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   o  expanded on Internationalization Considerations
 
    o  corrected informative/normative document references
 
@@ -831,8 +833,6 @@ A.10.  Version 01
 
    o  This version adds a full REST definition this is based on
       suggestions from Jakob Schlyter.
-
-
 
 
 
