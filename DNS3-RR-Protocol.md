@@ -273,44 +273,43 @@ implementing, and communicating their DNSSEC maintenance policies.
 The Registration Entity, upon receiving a signal or detecting through polling
 that the child desires to have its delegation updated, SHOULD run a series of
 tests to ensure that updating the parent zone will not create or exacerbate
-any problems with the child zone. The basic tests SHOULD include:
+any problems with the child zone. The Registration Entity MUST implement the
+processing rules defined in [@!RFC7344] section 4.1.  The Registration Entity
+SHOULD also implement tests that include:
 
   - checks that the child zone is is properly signed as per the Registration
     Entity and parent DNSSEC policies
-  - if updating the DS record, a check to ensure the child CDS RRset
-    references a KSK which is present in the child DNSKEY RRset and signs the
-    CDS RRset
   - ensuring all name servers in the apex NS RRset of the child zone agree on
     the apex NS RRset and CDS RRset contents
+
+The Registration Entity MAY require the child zone to implement zone
+delegation best practices as described in
+[@I-D.wallstrom-dnsop-dns-delegation-requirements].
 
 The Registration Entity SHOULD NOT make any changes to the DS RRset if the
 child name servers do not agree on the CDS content.
 
 ## Bootstrapping DNSSEC {#bootstrap}
-	
-A Registration Entity implementing this protocol  SHOULD require compliance
+
+A Registration Entity implementing this protocol SHOULD require compliance
 with additional tests in the case of establishing a new chain of trust.
 
  - The Registration Entity SHOULD check that all child name servers respond
    with a consistent CDS RRset for a number of queries over an extended period
-   of time.  Any change in DS response or inconsistency between child
-   responses in that time might indicate an attempted Man in the Middle (MITM)
-   attack, and SHOULD reset the test.  This minimizes the possibility of an
-   attacker spoofing responses.  An example of such a policy might be to scan
-   all child name servers in the delegation NS RRset every two hours for a
-   week.
+   of time ([@RFC8078] section 3.3).  Any change in DS response or
+   inconsistency between child responses in that time might indicate an
+   attempted Man in the Middle (MITM) attack, and SHOULD reset the test.  This
+   minimizes the possibility of an attacker spoofing responses.  An example of
+   such a policy might be to scan all child name servers in the delegation NS
+   RRset every two hours for a week.
 
  - The Registration Entity SHOULD require all of the child name servers in the
    delegation NS RRset to send the same response to a CDS query whether sent
    over TCP or UDP.
 
- - The Registration Entity MAY require the child zone to implement zone
-   delegation best practices as described in
-   [@I-D.wallstrom-dnsop-dns-delegation-requirements].
-
  - The Registration Entity MAY require the child operator to prove they can
-   add data to the zone, for example by publishing a particular token.  See
-   (#token) below.
+   add data to the zone, for example by publishing a particular token
+   ([@RFC8078] section 3.4).  See (#token) below.
 
 # API Definition
 
@@ -520,6 +519,7 @@ domain names.
   - make HTTP 4xx response code use more consistent
   - moved non sequitur text from Establishing a Chain of Trust to a new
     Applicability subsection
+  - cleaned up external references
 
 ## regext Version 05
 
