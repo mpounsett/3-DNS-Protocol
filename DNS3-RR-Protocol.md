@@ -378,10 +378,14 @@ This will make the delegation insecure.
    - HTTP Status code 200 indicates a success.
    - HTTP Status code 400 indicates a failure due to validation.
    - HTTP Status code 401 indicates an unauthorized resource access.
+   - HTTP Status code 403 indicates a failure due to an invalid challenge
    - HTTP Status code 404 indicates the domain does not exist.
    - HTTP Status code 412 indicates the parent does not have a DS RRset
    - HTTP Status code 429 indicates the client has been rate-limited.
    - HTTP Status code 500 indicates a failure due to unforeseeable reasons.
+
+Upon receipt of a 403 response the child operator SHOULD issue a POST for the
+"token" resource to fetch a challenge token to insert into the zone.
 
 #### Modifying DS Records
 ##### Request
@@ -397,10 +401,14 @@ CDS RRset, but MUST NOT delete the entire DS RRset.
    - HTTP Status code 200 indicates a success.
    - HTTP Status code 400 indicates a failure due to validation.
    - HTTP Status code 401 indicates an unauthorized resource access.
+   - HTTP Status code 403 indicates a failure due to an invalid challenge
    - HTTP Status code 404 indicates the domain does not exist.
    - HTTP Status code 412 indicates the parent does not have a DS RRset
    - HTTP Status code 429 indicates the client has been rate-limited.
    - HTTP Status code 500 indicates a failure due to unforeseeable reasons.
+
+Upon receipt of a 403 response the child operator SHOULD issue a POST for the
+"token" resource to fetch a challenge token to insert into the zone.
 
 ### Token resource {#token}
 
@@ -433,6 +441,7 @@ treated as a secret token.
    - HTTP Status code 200 indicates a success.  A token is included in the
 	 body of the response, as a valid TXT record
    - HTTP Status code 404 indicates the domain does not exist.
+   - HTTP Status code 429 indicates the client has been rate-limited.
    - HTTP Status code 500 indicates a failure due to unforeseeable reasons.
 
 ## Customized Error Messages
@@ -485,6 +494,7 @@ domain names.
   - rephrase registry lock text to make it an example rather than an
     exhaustive list of why a 401 may be returned
   - for above, add Authorization subsection
+  - make HTTP 4xx response code use more consistent
 
 ## regext Version 05
 

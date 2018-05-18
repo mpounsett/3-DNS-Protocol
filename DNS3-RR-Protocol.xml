@@ -436,11 +436,15 @@ This will make the delegation insecure.
 <t>HTTP Status code 200 indicates a success.</t>
 <t>HTTP Status code 400 indicates a failure due to validation.</t>
 <t>HTTP Status code 401 indicates an unauthorized resource access.</t>
+<t>HTTP Status code 403 indicates a failure due to an invalid challenge</t>
 <t>HTTP Status code 404 indicates the domain does not exist.</t>
 <t>HTTP Status code 412 indicates the parent does not have a DS RRset</t>
 <t>HTTP Status code 429 indicates the client has been rate-limited.</t>
 <t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.</t>
 </list>
+</t>
+<t>Upon receipt of a 403 response the child operator SHOULD issue a POST for the
+&quot;token&quot; resource to fetch a challenge token to insert into the zone.
 </t>
 </section>
 </section>
@@ -463,11 +467,15 @@ CDS RRset, but MUST NOT delete the entire DS RRset.
 <t>HTTP Status code 200 indicates a success.</t>
 <t>HTTP Status code 400 indicates a failure due to validation.</t>
 <t>HTTP Status code 401 indicates an unauthorized resource access.</t>
+<t>HTTP Status code 403 indicates a failure due to an invalid challenge</t>
 <t>HTTP Status code 404 indicates the domain does not exist.</t>
 <t>HTTP Status code 412 indicates the parent does not have a DS RRset</t>
 <t>HTTP Status code 429 indicates the client has been rate-limited.</t>
 <t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.</t>
 </list>
+</t>
+<t>Upon receipt of a 403 response the child operator SHOULD issue a POST for the
+&quot;token&quot; resource to fetch a challenge token to insert into the zone.
 </t>
 </section>
 </section>
@@ -507,6 +515,7 @@ treated as a secret token.
 <t>HTTP Status code 200 indicates a success.  A token is included in the
  body of the response, as a valid TXT record</t>
 <t>HTTP Status code 404 indicates the domain does not exist.</t>
+<t>HTTP Status code 429 indicates the client has been rate-limited.</t>
 <t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.</t>
 </list>
 </t>
@@ -587,6 +596,7 @@ offload security considerations to RFC8078</t>
 <t>rephrase registry lock text to make it an example rather than an
 exhaustive list of why a 401 may be returned</t>
 <t>for above, add Authorization subsection</t>
+<t>make HTTP 4xx response code use more consistent</t>
 </list>
 </t>
 </section>
