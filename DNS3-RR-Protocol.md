@@ -311,6 +311,24 @@ with additional tests in the case of establishing a new chain of trust.
    add data to the zone, for example by publishing a particular token
    ([@RFC8078] section 3.4).  See (#token) below.
 
+# Registration Entity Requirements
+
+## Probing the DNS
+
+When the Registration Entity is probing for child zone contents the
+Registration Entity SHOULD query the child zone's authoritative servers
+directly, and MUST NOT query a name server which is actively caching
+responses.  A caching name server could have out of date child zone data
+which could cause confusion or indeterminite behaviour as the child operator
+expects the Registration Entity to see a set of data which they do not.
+
+## Published Policy and Procedures {#policy}
+
+A Registration Entity implementing this protocol SHOULD publish a policy and
+procedures document which details steps taken, timings used, requirements
+implemented, etc. as they apply to this protocol and to the Registration
+Entity's implementation of CDS scanning.
+
 # API Definition
 
 ## Authorization
@@ -350,6 +368,28 @@ operator.
 ## RESTful Resources
 
 In the following text, "{domain}" is the child zone to be operated on.
+
+### Policy Resource
+
+Path: /policy
+
+#### Obtain Policy URL
+
+##### Request
+
+Syntax: GET /policy
+
+Request the URL for the Registration Entity's procedures and policy document
+as described in (#policy).
+
+##### Response
+   - HTTP Status code 201 indicates a success.
+   - HTTP Status code 404 indicates the resource does not exist.
+   - HTTP Status code 429 indicates the client has been rate-limited.
+   - HTTP Status code 500 indicates a failure due to unforeseeable reasons.
+
+The body of the response SHOULD contain the URL of the Registration Entity's
+procedures and policy document.
 
 ### CDS resource
 
@@ -520,6 +560,7 @@ domain names.
   - moved non sequitur text from Establishing a Chain of Trust to a new
     Applicability subsection
   - cleaned up external references
+  - added requirement for RE policy and procedure document
 
 ## regext Version 05
 

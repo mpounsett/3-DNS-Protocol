@@ -99,13 +99,13 @@ Table of Contents
      3.3.  Maintaining the Chain of Trust  . . . . . . . . . . . . .   7
      3.4.  Acceptance Processing . . . . . . . . . . . . . . . . . .   7
      3.5.  Bootstrapping DNSSEC  . . . . . . . . . . . . . . . . . .   8
-   4.  API Definition  . . . . . . . . . . . . . . . . . . . . . . .   8
-     4.1.  Authorization . . . . . . . . . . . . . . . . . . . . . .   8
-     4.2.  Authentication  . . . . . . . . . . . . . . . . . . . . .   9
-     4.3.  RESTful Resources . . . . . . . . . . . . . . . . . . . .   9
-       4.3.1.  CDS resource  . . . . . . . . . . . . . . . . . . . .   9
-       4.3.2.  Token resource  . . . . . . . . . . . . . . . . . . .  12
-     4.4.  Customized Error Messages . . . . . . . . . . . . . . . .  13
+   4.  Registration Entity Requirements  . . . . . . . . . . . . . .   8
+     4.1.  Probing the DNS . . . . . . . . . . . . . . . . . . . . .   8
+     4.2.  Published Policy and Procedures . . . . . . . . . . . . .   9
+   5.  API Definition  . . . . . . . . . . . . . . . . . . . . . . .   9
+     5.1.  Authorization . . . . . . . . . . . . . . . . . . . . . .   9
+     5.2.  Authentication  . . . . . . . . . . . . . . . . . . . . .   9
+     5.3.  RESTful Resources . . . . . . . . . . . . . . . . . . . .  10
 
 
 
@@ -114,25 +114,29 @@ Latour, et al.          Expires November 5, 2018                [Page 2]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
-   6.  IANA Actions  . . . . . . . . . . . . . . . . . . . . . . . .  13
-   7.  Internationalization Considerations . . . . . . . . . . . . .  13
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  13
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  14
-   Appendix A.  Document History . . . . . . . . . . . . . . . . . .  14
-     A.1.  regext Version 06 (not yet published) . . . . . . . . . .  14
-     A.2.  regext Version 05 . . . . . . . . . . . . . . . . . . . .  15
-     A.3.  regext Version 04 . . . . . . . . . . . . . . . . . . . .  15
-     A.4.  regext Version 03 . . . . . . . . . . . . . . . . . . . .  16
-     A.5.  regext Version 02 . . . . . . . . . . . . . . . . . . . .  16
-     A.6.  regext Version 01 . . . . . . . . . . . . . . . . . . . .  16
-     A.7.  regext Version 00 . . . . . . . . . . . . . . . . . . . .  16
-     A.8.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  17
-     A.9.  Version 02  . . . . . . . . . . . . . . . . . . . . . . .  17
-     A.10. Version 01  . . . . . . . . . . . . . . . . . . . . . . .  17
-     A.11. Version 00  . . . . . . . . . . . . . . . . . . . . . . .  17
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  17
+       5.3.1.  Policy Resource . . . . . . . . . . . . . . . . . . .  10
+       5.3.2.  CDS resource  . . . . . . . . . . . . . . . . . . . .  10
+       5.3.3.  Token resource  . . . . . . . . . . . . . . . . . . .  13
+     5.4.  Customized Error Messages . . . . . . . . . . . . . . . .  14
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
+   7.  IANA Actions  . . . . . . . . . . . . . . . . . . . . . . . .  14
+   8.  Internationalization Considerations . . . . . . . . . . . . .  14
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  14
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  15
+   Appendix A.  Document History . . . . . . . . . . . . . . . . . .  15
+     A.1.  regext Version 06 (not yet published) . . . . . . . . . .  15
+     A.2.  regext Version 05 . . . . . . . . . . . . . . . . . . . .  16
+     A.3.  regext Version 04 . . . . . . . . . . . . . . . . . . . .  16
+     A.4.  regext Version 03 . . . . . . . . . . . . . . . . . . . .  17
+     A.5.  regext Version 02 . . . . . . . . . . . . . . . . . . . .  17
+     A.6.  regext Version 01 . . . . . . . . . . . . . . . . . . . .  17
+     A.7.  regext Version 00 . . . . . . . . . . . . . . . . . . . .  18
+     A.8.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  18
+     A.9.  Version 02  . . . . . . . . . . . . . . . . . . . . . . .  18
+     A.10. Version 01  . . . . . . . . . . . . . . . . . . . . . . .  18
+     A.11. Version 00  . . . . . . . . . . . . . . . . . . . . . . .  18
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
 
 1.  Introduction
 
@@ -158,10 +162,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    impact the Registrant's delegation.  New information must be
    communicated to the Registrant, who must submit that information to
    the Registrar.  Often this involves cutting and pasting between email
-   and a web interface, which is error prone.  For example, a mistake
-   with copy and paste may result in a truncated DS record being
-   submitted to the parent zone, which can result in validation
-
 
 
 
@@ -170,6 +170,9 @@ Latour, et al.          Expires November 5, 2018                [Page 3]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
+   and a web interface, which is error prone.  For example, a mistake
+   with copy and paste may result in a truncated DS record being
+   submitted to the parent zone, which can result in validation
    failures.  Or, a Registrant may miss or ignore email from their DNS
    operator and take no action, halting a key roll.
 
@@ -215,9 +218,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    one such mechanism.  Even a Registration Entity that implements
    regular polling may wish to also implement this signalling protocol
    in order to allow a DNS operator to indicate a need to change DS
-   records on a shorter time scale than the Registration Entity's normal
-   scanning period.
-
 
 
 
@@ -225,6 +225,9 @@ Latour, et al.          Expires November 5, 2018                [Page 4]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   records on a shorter time scale than the Registration Entity's normal
+   scanning period.
 
    A key consideration for a Registration Entity in determining whether
    to implement this protocol is the scalability, from the DNS
@@ -271,9 +274,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Operator responsible for a zone, where the operator is neither the
    Registrant nor the Registrar of record for the delegation.
 
-   Uses of "child" and "parent" refer to the relationship between DNS
-   zone operators (see [RFC7719] and [I-D.ietf-dnsop-terminology-bis]).
-
 
 
 
@@ -282,6 +282,8 @@ Latour, et al.          Expires November 5, 2018                [Page 5]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
+   Uses of "child" and "parent" refer to the relationship between DNS
+   zone operators (see [RFC7719] and [I-D.ietf-dnsop-terminology-bis]).
    In this document, unless otherwise noted, the child is the third-
    party DNS operator and the parent is the Registry.
 
@@ -328,8 +330,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    With no current mechanism in place to scalably discover the Registrar
    for a particular registration, the problem of automatic discovery of
-   the base URL of the API is considered out of scope of this document.
-
 
 
 
@@ -338,6 +338,7 @@ Latour, et al.          Expires November 5, 2018                [Page 6]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
+   the base URL of the API is considered out of scope of this document.
    The authors recommend standardization of an RDAP extension to obtain
    this information from the Registry.
 
@@ -388,7 +389,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 
 
-
 Latour, et al.          Expires November 5, 2018                [Page 7]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
@@ -423,20 +423,20 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  The Registration Entity MAY require the child operator to prove
       they can add data to the zone, for example by publishing a
-      particular token ([RFC8078] section 3.4).  See Section 4.3.2
+      particular token ([RFC8078] section 3.4).  See Section 5.3.3
       below.
 
-4.  API Definition
+4.  Registration Entity Requirements
 
-4.1.  Authorization
+4.1.  Probing the DNS
 
-   Clients may be denied access to change the DS records for domains
-   that are subject to certain registration-related locks (HTTP Status
-   code 401).  For example, the Registry Lock is a mechanism provided by
-   certain Registries or Registrars that prevents domain hijacking by
-   ensuring no attributes of the domain are changeable, and no transfer
-   or deletion transactions can be processed against the domain name
-   without manual intervention.
+   When the Registration Entity is probing for child zone contents the
+   Registration Entity SHOULD query the child zone's authoritative
+   servers directly, and MUST NOT query a name server which is actively
+   caching responses.  A caching name server could have out of date
+   child zone data which could cause confusion or indeterminite
+   behaviour as the child operator expects the Registration Entity to
+   see a set of data which they do not.
 
 
 
@@ -450,7 +450,26 @@ Latour, et al.          Expires November 5, 2018                [Page 8]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-4.2.  Authentication
+4.2.  Published Policy and Procedures
+
+   A Registration Entity implementing this protocol SHOULD publish a
+   policy and procedures document which details steps taken, timings
+   used, requirements implemented, etc. as they apply to this protocol
+   and to the Registration Entity's implementation of CDS scanning.
+
+5.  API Definition
+
+5.1.  Authorization
+
+   Clients may be denied access to change the DS records for domains
+   that are subject to certain registration-related locks (HTTP Status
+   code 401).  For example, the Registry Lock is a mechanism provided by
+   certain Registries or Registrars that prevents domain hijacking by
+   ensuring no attributes of the domain are changeable, and no transfer
+   or deletion transactions can be processed against the domain name
+   without manual intervention.
+
+5.2.  Authentication
 
    The API does not impose any unique server authentication
    requirements.  There is a potential risk for a Man in the Middle
@@ -476,28 +495,9 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    avenue for a denial of service attack against the systems of the
    Registration Entity, the Registry, or the child operator.
 
-4.3.  RESTful Resources
 
-   In the following text, "{domain}" is the child zone to be operated
-   on.
 
-4.3.1.  CDS resource
 
-   Path: /domains/{domain}/cds
-
-4.3.1.1.  Establishing Initial Trust (Enabling DNSSEC)
-
-4.3.1.1.1.  Request
-
-   Syntax: POST /domains/{domain}/cds
-
-   Request that an initial set of DS records based on the CDS record in
-   the child zone be inserted into the Registry and the parent zone upon
-   the successful completion of the request.  If there are multiple CDS
-   records in the CDS RRset, multiple DS records will be added.
-
-   The body of the POST SHOULD be empty, however server implementations
-   SHOULD NOT reject nonempty requests.
 
 
 
@@ -506,7 +506,66 @@ Latour, et al.          Expires November 5, 2018                [Page 9]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-4.3.1.1.2.  Response
+5.3.  RESTful Resources
+
+   In the following text, "{domain}" is the child zone to be operated
+   on.
+
+5.3.1.  Policy Resource
+
+   Path: /policy
+
+5.3.1.1.  Obtain Policy URL
+
+5.3.1.1.1.  Request
+
+   Syntax: GET /policy
+
+   Request the URL for the Registration Entity's procedures and policy
+   document as described in Section 4.2.
+
+5.3.1.1.2.  Response
+
+   o  HTTP Status code 201 indicates a success.
+
+   o  HTTP Status code 404 indicates the resource does not exist.
+
+   o  HTTP Status code 429 indicates the client has been rate-limited.
+
+   o  HTTP Status code 500 indicates a failure due to unforeseeable
+      reasons.
+
+   The body of the response SHOULD contain the URL of the Registration
+   Entity's procedures and policy document.
+
+5.3.2.  CDS resource
+
+   Path: /domains/{domain}/cds
+
+5.3.2.1.  Establishing Initial Trust (Enabling DNSSEC)
+
+5.3.2.1.1.  Request
+
+   Syntax: POST /domains/{domain}/cds
+
+   Request that an initial set of DS records based on the CDS record in
+   the child zone be inserted into the Registry and the parent zone upon
+   the successful completion of the request.  If there are multiple CDS
+   records in the CDS RRset, multiple DS records will be added.
+
+
+
+
+
+Latour, et al.          Expires November 5, 2018               [Page 10]
+
+Internet-Draft                  3-DNS-RRR                       May 2018
+
+
+   The body of the POST SHOULD be empty, however server implementations
+   SHOULD NOT reject nonempty requests.
+
+5.3.2.1.2.  Response
 
    o  HTTP Status code 201 indicates a success.
 
@@ -535,9 +594,9 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    for the "token" resource to fetch a challenge token to insert into
    the zone.
 
-4.3.1.2.  Removing DS Records
+5.3.2.2.  Removing DS Records
 
-4.3.1.2.1.  Request
+5.3.2.2.1.  Request
 
    Syntax: DELETE /domains/{domain}/cds
 
@@ -545,70 +604,11 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    record in the child zone, indicating a request that the entire DS
    RRset be removed.  This will make the delegation insecure.
 
-4.3.1.2.2.  Response
+5.3.2.2.2.  Response
 
    o  HTTP Status code 200 indicates a success.
 
    o  HTTP Status code 400 indicates a failure due to validation.
-
-   o  HTTP Status code 401 indicates an unauthorized resource access.
-
-
-
-
-
-Latour, et al.          Expires November 5, 2018               [Page 10]
-
-Internet-Draft                  3-DNS-RRR                       May 2018
-
-
-   o  HTTP Status code 403 indicates a failure due to an invalid
-      challenge
-
-   o  HTTP Status code 404 indicates the domain does not exist.
-
-   o  HTTP Status code 412 indicates the parent does not have a DS RRset
-
-   o  HTTP Status code 429 indicates the client has been rate-limited.
-
-   o  HTTP Status code 500 indicates a failure due to unforeseeable
-      reasons.
-
-   Upon receipt of a 403 response the child operator SHOULD issue a POST
-   for the "token" resource to fetch a challenge token to insert into
-   the zone.
-
-4.3.1.3.  Modifying DS Records
-
-4.3.1.3.1.  Request
-
-   Syntax: PUT /domains/{domain}/cds
-
-   Request that the Registration Entity modify the DS RRset based on the
-   CDS available in the child zone.  As a result of this request the
-   Registration Entity SHOULD add or delete DS or DNSKEY records as
-   indicated by the CDS RRset, but MUST NOT delete the entire DS RRset.
-
-4.3.1.3.2.  Response
-
-   o  HTTP Status code 200 indicates a success.
-
-   o  HTTP Status code 400 indicates a failure due to validation.
-
-   o  HTTP Status code 401 indicates an unauthorized resource access.
-
-   o  HTTP Status code 403 indicates a failure due to an invalid
-      challenge
-
-   o  HTTP Status code 404 indicates the domain does not exist.
-
-   o  HTTP Status code 412 indicates the parent does not have a DS RRset
-
-   o  HTTP Status code 429 indicates the client has been rate-limited.
-
-   o  HTTP Status code 500 indicates a failure due to unforeseeable
-      reasons.
-
 
 
 
@@ -618,17 +618,73 @@ Latour, et al.          Expires November 5, 2018               [Page 11]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
+   o  HTTP Status code 401 indicates an unauthorized resource access.
+
+   o  HTTP Status code 403 indicates a failure due to an invalid
+      challenge
+
+   o  HTTP Status code 404 indicates the domain does not exist.
+
+   o  HTTP Status code 412 indicates the parent does not have a DS RRset
+
+   o  HTTP Status code 429 indicates the client has been rate-limited.
+
+   o  HTTP Status code 500 indicates a failure due to unforeseeable
+      reasons.
+
    Upon receipt of a 403 response the child operator SHOULD issue a POST
    for the "token" resource to fetch a challenge token to insert into
    the zone.
 
-4.3.2.  Token resource
+5.3.2.3.  Modifying DS Records
+
+5.3.2.3.1.  Request
+
+   Syntax: PUT /domains/{domain}/cds
+
+   Request that the Registration Entity modify the DS RRset based on the
+   CDS available in the child zone.  As a result of this request the
+   Registration Entity SHOULD add or delete DS or DNSKEY records as
+   indicated by the CDS RRset, but MUST NOT delete the entire DS RRset.
+
+5.3.2.3.2.  Response
+
+   o  HTTP Status code 200 indicates a success.
+
+   o  HTTP Status code 400 indicates a failure due to validation.
+
+   o  HTTP Status code 401 indicates an unauthorized resource access.
+
+   o  HTTP Status code 403 indicates a failure due to an invalid
+      challenge
+
+   o  HTTP Status code 404 indicates the domain does not exist.
+
+   o  HTTP Status code 412 indicates the parent does not have a DS RRset
+
+   o  HTTP Status code 429 indicates the client has been rate-limited.
+
+   o  HTTP Status code 500 indicates a failure due to unforeseeable
+      reasons.
+
+
+
+Latour, et al.          Expires November 5, 2018               [Page 12]
+
+Internet-Draft                  3-DNS-RRR                       May 2018
+
+
+   Upon receipt of a 403 response the child operator SHOULD issue a POST
+   for the "token" resource to fetch a challenge token to insert into
+   the zone.
+
+5.3.3.  Token resource
 
    Path: /domains/{domain}/token
 
-4.3.2.1.  Establish Initial Trust with Challenge
+5.3.3.1.  Establish Initial Trust with Challenge
 
-4.3.2.1.1.  Request
+5.3.3.1.1.  Request
 
    Syntax: GET /domains/{domain}/token
 
@@ -650,7 +706,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Note that the _delegate TXT record is publicly visible and therefore
    cannot be treated as a secret token.
 
-4.3.2.1.2.  Response
+5.3.3.1.2.  Response
 
    o  HTTP Status code 200 indicates a success.  A token is included in
       the body of the response, as a valid TXT record
@@ -669,19 +725,19 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 
 
-Latour, et al.          Expires November 5, 2018               [Page 12]
+Latour, et al.          Expires November 5, 2018               [Page 13]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-4.4.  Customized Error Messages
+5.4.  Customized Error Messages
 
    The Registration Entity MAY provide a customized error message in the
    response body in addition to the HTTP status code defined in the
    previous section.  This response MAY include an identifying number/
    string that can be used to track the request.
 
-5.  Security Considerations
+6.  Security Considerations
 
    Using CDS to bootstrap trust poses inherent risks.  The issues
    surrounding this practice are well described in the Security
@@ -690,19 +746,19 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    document, there are no new Security Considerations posed by using
    this protocol in combination with CDS.
 
-6.  IANA Actions
+7.  IANA Actions
 
    This document has no actions for IANA
 
-7.  Internationalization Considerations
+8.  Internationalization Considerations
 
    This protocol is designed for machine to machine communications.
    Clients and servers SHOULD use punycode [RFC5891] when operating on
    internationalized domain names.
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [RFC5891]  Klensin, J., "Internationalized Domain Names in
               Applications (IDNA): Protocol", RFC 5891,
@@ -725,12 +781,12 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 
 
-Latour, et al.          Expires November 5, 2018               [Page 13]
+Latour, et al.          Expires November 5, 2018               [Page 14]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
-8.2.  Informative References
+9.2.  Informative References
 
    [I-D.ietf-dnsop-terminology-bis]
               Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
@@ -781,7 +837,7 @@ A.1.  regext Version 06 (not yet published)
 
 
 
-Latour, et al.          Expires November 5, 2018               [Page 14]
+Latour, et al.          Expires November 5, 2018               [Page 15]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
@@ -817,6 +873,10 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    o  moved non sequitur text from Establishing a Chain of Trust to a
       new Applicability subsection
 
+   o  cleaned up external references
+
+   o  added requirement for RE policy and procedure document
+
 A.2.  regext Version 05
 
    o  new version to keep the draft alive
@@ -830,17 +890,16 @@ A.3.  regext Version 04
 
    o  adding note about CDS/CDNSKEY interchangability in this document
 
-   o  added advice to scan all delegations (including insecure
-      delegations) for CDS in order to bootstrap or update DNSSEC
 
 
 
-
-
-Latour, et al.          Expires November 5, 2018               [Page 15]
+Latour, et al.          Expires November 5, 2018               [Page 16]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   o  added advice to scan all delegations (including insecure
+      delegations) for CDS in order to bootstrap or update DNSSEC
 
    o  removed "Other Delegation Maintenance" section, since we decided a
       while ago not to use this to update NS
@@ -885,18 +944,19 @@ A.6.  regext Version 01
 
    o  Text edits and clarifications.
 
-A.7.  regext Version 00
-
-   o  Working group document same as 03, just track changed to standard
 
 
 
 
 
-Latour, et al.          Expires November 5, 2018               [Page 16]
+Latour, et al.          Expires November 5, 2018               [Page 17]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+A.7.  regext Version 00
+
+   o  Working group document same as 03, just track changed to standard
 
 A.8.  Version 03
 
@@ -938,6 +998,18 @@ Authors' Addresses
    Email: paul@nohats.ca
 
 
+
+
+
+
+
+
+
+Latour, et al.          Expires November 5, 2018               [Page 18]
+
+Internet-Draft                  3-DNS-RRR                       May 2018
+
+
    Matthew Pounsett
    Nimbus Operations Inc.
    Toronto, ON
@@ -949,4 +1021,44 @@ Authors' Addresses
 
 
 
-Latour, et al.          Expires November 5, 2018               [Page 17]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Latour, et al.          Expires November 5, 2018               [Page 19]

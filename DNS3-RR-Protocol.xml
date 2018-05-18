@@ -358,6 +358,27 @@ add data to the zone, for example by publishing a particular token
 </section>
 </section>
 
+<section anchor="registration-entity-requirements" title="Registration Entity Requirements">
+
+<section anchor="probing-the-dns" title="Probing the DNS">
+<t>When the Registration Entity is probing for child zone contents the
+Registration Entity SHOULD query the child zone's authoritative servers
+directly, and MUST NOT query a name server which is actively caching
+responses.  A caching name server could have out of date child zone data
+which could cause confusion or indeterminite behaviour as the child operator
+expects the Registration Entity to see a set of data which they do not.
+</t>
+</section>
+
+<section anchor="policy" title="Published Policy and Procedures">
+<t>A Registration Entity implementing this protocol SHOULD publish a policy and
+procedures document which details steps taken, timings used, requirements
+implemented, etc. as they apply to this protocol and to the Registration
+Entity's implementation of CDS scanning.
+</t>
+</section>
+</section>
+
 <section anchor="api-definition" title="API Definition">
 
 <section anchor="authorization" title="Authorization">
@@ -400,13 +421,43 @@ operator.
 <t>In the following text, &quot;{domain}&quot; is the child zone to be operated on.
 </t>
 
+<section anchor="policy-resource" title="Policy Resource">
+<t>Path: /policy
+</t>
+
+<section anchor="obtain-policy-url" title="Obtain Policy URL">
+
+<section anchor="request" title="Request">
+<t>Syntax: GET /policy
+</t>
+<t>Request the URL for the Registration Entity's procedures and policy document
+as described in <xref target="policy"/>.
+</t>
+</section>
+
+<section anchor="response" title="Response">
+<t>
+<list style="symbols">
+<t>HTTP Status code 201 indicates a success.</t>
+<t>HTTP Status code 404 indicates the resource does not exist.</t>
+<t>HTTP Status code 429 indicates the client has been rate-limited.</t>
+<t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.</t>
+</list>
+</t>
+<t>The body of the response SHOULD contain the URL of the Registration Entity's
+procedures and policy document.
+</t>
+</section>
+</section>
+</section>
+
 <section anchor="cds-resource" title="CDS resource">
 <t>Path: /domains/{domain}/cds
 </t>
 
 <section anchor="establishing-initial-trust-enabling-dnssec" title="Establishing Initial Trust (Enabling DNSSEC)">
 
-<section anchor="request" title="Request">
+<section anchor="request-1" title="Request">
 <t>Syntax: POST /domains/{domain}/cds
 </t>
 <t>Request that an initial set of DS records based on the CDS record in the child
@@ -419,7 +470,7 @@ NOT reject nonempty requests.
 </t>
 </section>
 
-<section anchor="response" title="Response">
+<section anchor="response-1" title="Response">
 <t>
 <list style="symbols">
 <t>HTTP Status code 201 indicates a success.</t>
@@ -445,7 +496,7 @@ RRset for the child zone.
 
 <section anchor="removing-ds-records" title="Removing DS Records">
 
-<section anchor="request-1" title="Request">
+<section anchor="request-2" title="Request">
 <t>Syntax: DELETE /domains/{domain}/cds
 </t>
 <t>Request that the Registration Entity check for a null CDS or CDNSKEY record in
@@ -454,7 +505,7 @@ This will make the delegation insecure.
 </t>
 </section>
 
-<section anchor="response-1" title="Response">
+<section anchor="response-2" title="Response">
 <t>
 <list style="symbols">
 <t>HTTP Status code 200 indicates a success.</t>
@@ -475,7 +526,7 @@ This will make the delegation insecure.
 
 <section anchor="modifying-ds-records" title="Modifying DS Records">
 
-<section anchor="request-2" title="Request">
+<section anchor="request-3" title="Request">
 <t>Syntax: PUT /domains/{domain}/cds
 </t>
 <t>Request that the Registration Entity modify the DS RRset based on the CDS
@@ -485,7 +536,7 @@ CDS RRset, but MUST NOT delete the entire DS RRset.
 </t>
 </section>
 
-<section anchor="response-2" title="Response">
+<section anchor="response-3" title="Response">
 <t>
 <list style="symbols">
 <t>HTTP Status code 200 indicates a success.</t>
@@ -511,7 +562,7 @@ CDS RRset, but MUST NOT delete the entire DS RRset.
 
 <section anchor="establish-initial-trust-with-challenge" title="Establish Initial Trust with Challenge">
 
-<section anchor="request-3" title="Request">
+<section anchor="request-4" title="Request">
 <t>Syntax: GET /domains/{domain}/token
 </t>
 <t>The DNSSEC policy of the Registration Entity may require proof that the DNS
@@ -533,7 +584,7 @@ treated as a secret token.
 </t>
 </section>
 
-<section anchor="response-3" title="Response">
+<section anchor="response-4" title="Response">
 <t>
 <list style="symbols">
 <t>HTTP Status code 200 indicates a success.  A token is included in the
@@ -623,6 +674,8 @@ exhaustive list of why a 401 may be returned</t>
 <t>make HTTP 4xx response code use more consistent</t>
 <t>moved non sequitur text from Establishing a Chain of Trust to a new
 Applicability subsection</t>
+<t>cleaned up external references</t>
+<t>added requirement for RE policy and procedure document</t>
 </list>
 </t>
 </section>
