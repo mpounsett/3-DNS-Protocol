@@ -130,6 +130,42 @@ to update a Registrant's zone(s) on the Registrant's behalf, it has the
 beneficial side-effect of enabling a Registrant who manages their own DNS to
 automate their operations, should they wish to do so.
 
+## Applicability
+
+As this protocol is intended to enable third-party DNS operators to manage
+their clients' zones, it may not be required in cases where this has already
+been enabled by some scalable mechanism.
+
+For example, some Registration Entities regularly scan their Registrants'
+zones (both the secured and unsecured delegations) for CDS records, in order
+to bootstrap or maintain the chain of trust.  In this case there is normally
+no need for a DNS operator to signal the Registration Entity to scan for CDS,
+since that is already being done, and so implementing this protocol would be
+redundant.
+
+[@RFC7344] section 6.1.2 discusses "other mechanisms" than regular polling
+which will be used to trigger the parent (or Registration Entity) to check for
+updated CDS in the child zone.  This protocol is one such mechanism.  Even a
+Registration Entity that implements regular polling may wish to also implement
+this signalling protocol in order to allow a DNS operator to indicate a need
+to change DS records on a shorter time scale than the Registration Entity's
+normal scanning period.
+
+A key consideration for a Registration Entity in determining whether to
+implement this protocol is the scalability, from the DNS operator's
+perspective, of any existing notification mechanisms already implemented by
+the Registration Entity.  If the Registration Entity does not implement an
+update or signalling mechanism that is widely adoptable by other Registration
+Entities, then implementing this protocol should be seriously considered.
+
+For example, a proprietary API may not be considered scalable by a DNS
+operator if it is only implemented by one Registration Entity, as that implies
+that the DNS operator must maintain client software for the APIs of many
+Registration Entiies, which is a significant development burden.  Similarly,
+even an open API which requires a bilateral agreement and/or the maintenance
+of unique authentication credentials may place an undue administrative burden
+on third party DNS operators.
+
 ## Implementation Considerations
 
 In some environments the role of the Registration Entity may be split between
@@ -211,25 +247,12 @@ Registry.
 After signing the zone, the child DNS Operator needs to upload the DS
 record(s) to the parent.  The child can signal its desire to have DNSSEC
 validation enabled by publishing one of the special DNS records CDS and/or
-CDNSKEY as defined in [@!RFC7344] and [@!RFC8078].
+CDNSKEY as defined in [@!RFC7344] and [@!RFC8078], and then by using this
+protocol to trigger a CDS scan by the Registration Entity.
 
-A Registration Entitiy MAY regularly scan the child name servers of unsecured
-delegations for CDS records in order to bootstrap DNSSEC, and are advised to
-do so.  At the time of publication, some ccTLD Registries are already doing
-this.  A Registration Entity that regularly scans all child zones under its
-responsibility (both secured and unsecured) for CDS will not require the API
-described in this document.  However, such a Registration Entity should follow
-the guidelines discussed in (#bootstrap) below when using CDS to bootstrap
-DNSSEC on a previously unsecured delegation.
-
-In the case where the Registration Entity is not normally scanning child zones
-for CDS records, the Registration Entity SHOULD implement the API from this
-document, allowing child operators to notify the Registration Entity to begin
-such a scan.
-
-Once the Registration Entity finds CDS records in a child zone it is
-responsible for, or receives a signal via this API, it SHOULD start acceptance
-processing as described below.
+Once the Registration Entity finds a CDS record in an unsecured child zone it
+is responsible for, or receives a signal via this API, it SHOULD start
+acceptance processing as described below in (#acceptance) and (#bootstrap).
 
 ## Maintaining the Chain of Trust
 
@@ -245,7 +268,7 @@ their systems and the systems of child operators from abuse.
 Each parent operator and Registration Entity is responsible for developing,
 implementing, and communicating their DNSSEC maintenance policies.
 
-## Acceptance Processing
+## Acceptance Processing {#acceptance}
 
 The Registration Entity, upon receiving a signal or detecting through polling
 that the child desires to have its delegation updated, SHOULD run a series of
@@ -495,6 +518,8 @@ domain names.
     exhaustive list of why a 401 may be returned
   - for above, add Authorization subsection
   - make HTTP 4xx response code use more consistent
+  - moved non sequitur text from Establishing a Chain of Trust to a new
+    Applicability subsection
 
 ## regext Version 05
 
