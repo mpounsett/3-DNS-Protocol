@@ -92,7 +92,7 @@ Table of Contents
      1.2.  Implementation Considerations . . . . . . . . . . . . . .   5
    2.  Notional Conventions  . . . . . . . . . . . . . . . . . . . .   5
      2.1.  Definitions . . . . . . . . . . . . . . . . . . . . . . .   5
-     2.2.  RFC2119 Keywords  . . . . . . . . . . . . . . . . . . . .   6
+     2.2.  RFC8174 Keywords  . . . . . . . . . . . . . . . . . . . .   6
    3.  Process Overview  . . . . . . . . . . . . . . . . . . . . . .   6
      3.1.  Identifying the Registration Entity . . . . . . . . . . .   6
      3.2.  Establishing a Chain of Trust . . . . . . . . . . . . . .   7
@@ -127,10 +127,10 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Appendix A.  Document History . . . . . . . . . . . . . . . . . .  15
      A.1.  regext Version 06 (not yet published) . . . . . . . . . .  15
      A.2.  regext Version 05 . . . . . . . . . . . . . . . . . . . .  16
-     A.3.  regext Version 04 . . . . . . . . . . . . . . . . . . . .  16
+     A.3.  regext Version 04 . . . . . . . . . . . . . . . . . . . .  17
      A.4.  regext Version 03 . . . . . . . . . . . . . . . . . . . .  17
      A.5.  regext Version 02 . . . . . . . . . . . . . . . . . . . .  17
-     A.6.  regext Version 01 . . . . . . . . . . . . . . . . . . . .  17
+     A.6.  regext Version 01 . . . . . . . . . . . . . . . . . . . .  18
      A.7.  regext Version 00 . . . . . . . . . . . . . . . . . . . .  18
      A.8.  Version 03  . . . . . . . . . . . . . . . . . . . . . . .  18
      A.9.  Version 02  . . . . . . . . . . . . . . . . . . . . . . .  18
@@ -301,11 +301,13 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    in this document.  Unless otherwise noted, any use of "CDS" or
    "CDNSKEY" can be assumed to also refer to the other.
 
-2.2.  RFC2119 Keywords
+2.2.  RFC8174 Keywords
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in [RFC2119].
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
 3.  Process Overview
 
@@ -328,8 +330,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    referral system, however at this time RDAP has yet to be deployed at
    most Registries.
 
-   With no current mechanism in place to scalably discover the Registrar
-   for a particular registration, the problem of automatic discovery of
 
 
 
@@ -338,6 +338,8 @@ Latour, et al.          Expires November 5, 2018                [Page 6]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
+   With no current mechanism in place to scalably discover the Registrar
+   for a particular registration, the problem of automatic discovery of
    the base URL of the API is considered out of scope of this document.
    The authors recommend standardization of an RDAP extension to obtain
    this information from the Registry.
@@ -384,8 +386,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    o  checks that the child zone is is properly signed as per the
       Registration Entity and parent DNSSEC policies
 
-   o  ensuring all name servers in the apex NS RRset of the child zone
-      agree on the apex NS RRset and CDS RRset contents
 
 
 
@@ -393,6 +393,9 @@ Latour, et al.          Expires November 5, 2018                [Page 7]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   o  ensuring all name servers in the apex NS RRset of the child zone
+      agree on the apex NS RRset and CDS RRset contents
 
    The Registration Entity MAY require the child zone to implement zone
    delegation best practices as described in
@@ -437,9 +440,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    child zone data which could cause confusion or indeterminite
    behaviour as the child operator expects the Registration Entity to
    see a set of data which they do not.
-
-
-
 
 
 
@@ -760,6 +760,11 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 9.1.  Normative References
 
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
    [RFC5891]  Klensin, J., "Internationalized Domain Names in
               Applications (IDNA): Protocol", RFC 5891,
               DOI 10.17487/RFC5891, August 2010,
@@ -774,17 +779,21 @@ Internet-Draft                  3-DNS-RRR                       May 2018
               DOI 10.17487/RFC7344, September 2014,
               <https://www.rfc-editor.org/info/rfc7344>.
 
-   [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
-              the Parent via CDS/CDNSKEY", RFC 8078,
-              DOI 10.17487/RFC8078, March 2017,
-              <https://www.rfc-editor.org/info/rfc8078>.
-
 
 
 Latour, et al.          Expires November 5, 2018               [Page 14]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
+              the Parent via CDS/CDNSKEY", RFC 8078,
+              DOI 10.17487/RFC8078, March 2017,
+              <https://www.rfc-editor.org/info/rfc8078>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
 9.2.  Informative References
 
@@ -797,11 +806,6 @@ Internet-Draft                  3-DNS-RRR                       May 2018
               Wallstrom, P. and J. Schlyter, "DNS Delegation
               Requirements", draft-wallstrom-dnsop-dns-delegation-
               requirements-03 (work in progress), October 2016.
-
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC3912]  Daigle, L., "WHOIS Protocol Specification", RFC 3912,
               DOI 10.17487/RFC3912, September 2004,
@@ -829,11 +833,7 @@ A.1.  regext Version 06 (not yet published)
    o  clarify language indicating that a registrant may be a user of
       this protocol
 
-   o  try to make it clearer that the DNS operator role may be one of
-      several different parties, without blurring the line between role
-      and party
 
-   o  restructure the abstract to lead with the goals
 
 
 
@@ -841,6 +841,12 @@ Latour, et al.          Expires November 5, 2018               [Page 15]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   o  try to make it clearer that the DNS operator role may be one of
+      several different parties, without blurring the line between role
+      and party
+
+   o  restructure the abstract to lead with the goals
 
    o  better address potential issues with the status quo in the
       Introduction
@@ -885,18 +891,17 @@ A.2.  regext Version 05
 
    o  updating author organization
 
-A.3.  regext Version 04
-
-   o  changed uses of Registrar to Registration Entity and updated
-      definitions to improve clarity
-
-
 
 
 Latour, et al.          Expires November 5, 2018               [Page 16]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+A.3.  regext Version 04
+
+   o  changed uses of Registrar to Registration Entity and updated
+      definitions to improve clarity
 
    o  adding note about CDS/CDNSKEY interchangability in this document
 
@@ -938,13 +943,8 @@ A.5.  regext Version 02
 
    o  Text edits and clarifications.
 
-A.6.  regext Version 01
 
-   o  Rewrote Abstract and Into (MP)
 
-   o  Introduced code 401 when changes are not allowed
-
-   o  Text edits and clarifications.
 
 
 
@@ -953,6 +953,14 @@ Latour, et al.          Expires November 5, 2018               [Page 17]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+A.6.  regext Version 01
+
+   o  Rewrote Abstract and Into (MP)
+
+   o  Introduced code 401 when changes are not allowed
+
+   o  Text edits and clarifications.
 
 A.7.  regext Version 00
 
@@ -991,14 +999,6 @@ Authors' Addresses
    Email: olafur+ietf@cloudflare.com
 
 
-   Paul Wouters
-   Red Hat
-   Toronto, ON
-
-   Email: paul@nohats.ca
-
-
-
 
 
 
@@ -1010,18 +1010,18 @@ Latour, et al.          Expires November 5, 2018               [Page 18]
 Internet-Draft                  3-DNS-RRR                       May 2018
 
 
+   Paul Wouters
+   Red Hat
+   Toronto, ON
+
+   Email: paul@nohats.ca
+
+
    Matthew Pounsett
    Nimbus Operations Inc.
    Toronto, ON
 
    Email: matt@conundrum.com
-
-
-
-
-
-
-
 
 
 

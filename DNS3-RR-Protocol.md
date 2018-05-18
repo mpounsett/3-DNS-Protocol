@@ -210,11 +210,12 @@ function but for different record types, are used interchangably in this
 document.  Unless otherwise noted, any use of "CDS" or "CDNSKEY" can be
 assumed to also refer to the other.
 
-## RFC2119 Keywords
+## RFC8174 Keywords
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [@RFC2119].
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in BCP 14 [@!RFC2119] [@!RFC8174]
+when, and only when, they appear in all capitals, as shown here.
 
 # Process Overview
 
@@ -569,6 +570,7 @@ domain names.
   - cleaned up external references
   - added requirement for RE policy and procedure document
   - reduce the deep subheading mess
+  - updated RFC2119 text to RFC8174
 
 ## regext Version 05
 
