@@ -517,14 +517,14 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 5.3.1.1.  Obtain Policy URL
 
-5.3.1.1.1.  Request
+   *Request*
 
    Syntax: GET /policy
 
    Request the URL for the Registration Entity's procedures and policy
    document as described in Section 4.2.
 
-5.3.1.1.2.  Response
+   *Response*
 
    o  HTTP Status code 201 indicates a success.
 
@@ -544,7 +544,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 5.3.2.1.  Establishing Initial Trust (Enabling DNSSEC)
 
-5.3.2.1.1.  Request
+   *Request*
 
    Syntax: POST /domains/{domain}/cds
 
@@ -565,7 +565,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    The body of the POST SHOULD be empty, however server implementations
    SHOULD NOT reject nonempty requests.
 
-5.3.2.1.2.  Response
+   *Response*
 
    o  HTTP Status code 201 indicates a success.
 
@@ -596,7 +596,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 5.3.2.2.  Removing DS Records
 
-5.3.2.2.1.  Request
+   *Request*
 
    Syntax: DELETE /domains/{domain}/cds
 
@@ -604,7 +604,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    record in the child zone, indicating a request that the entire DS
    RRset be removed.  This will make the delegation insecure.
 
-5.3.2.2.2.  Response
+   *Response*
 
    o  HTTP Status code 200 indicates a success.
 
@@ -638,7 +638,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 5.3.2.3.  Modifying DS Records
 
-5.3.2.3.1.  Request
+   *Request*
 
    Syntax: PUT /domains/{domain}/cds
 
@@ -647,7 +647,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Registration Entity SHOULD add or delete DS or DNSKEY records as
    indicated by the CDS RRset, but MUST NOT delete the entire DS RRset.
 
-5.3.2.3.2.  Response
+   *Response*
 
    o  HTTP Status code 200 indicates a success.
 
@@ -684,7 +684,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
 5.3.3.1.  Establish Initial Trust with Challenge
 
-5.3.3.1.1.  Request
+   *Request*
 
    Syntax: GET /domains/{domain}/token
 
@@ -706,7 +706,7 @@ Internet-Draft                  3-DNS-RRR                       May 2018
    Note that the _delegate TXT record is publicly visible and therefore
    cannot be treated as a secret token.
 
-5.3.3.1.2.  Response
+   *Response*
 
    o  HTTP Status code 200 indicates a success.  A token is included in
       the body of the response, as a valid TXT record
@@ -877,6 +877,8 @@ Internet-Draft                  3-DNS-RRR                       May 2018
 
    o  added requirement for RE policy and procedure document
 
+   o  reduce the deep subheading mess
+
 A.2.  regext Version 05
 
    o  new version to keep the draft alive
@@ -888,8 +890,6 @@ A.3.  regext Version 04
    o  changed uses of Registrar to Registration Entity and updated
       definitions to improve clarity
 
-   o  adding note about CDS/CDNSKEY interchangability in this document
-
 
 
 
@@ -897,6 +897,8 @@ Latour, et al.          Expires November 5, 2018               [Page 16]
 
 Internet-Draft                  3-DNS-RRR                       May 2018
 
+
+   o  adding note about CDS/CDNSKEY interchangability in this document
 
    o  added advice to scan all delegations (including insecure
       delegations) for CDS in order to bootstrap or update DNSSEC
@@ -943,8 +945,6 @@ A.6.  regext Version 01
    o  Introduced code 401 when changes are not allowed
 
    o  Text edits and clarifications.
-
-
 
 
 

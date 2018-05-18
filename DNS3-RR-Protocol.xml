@@ -426,16 +426,15 @@ operator.
 </t>
 
 <section anchor="obtain-policy-url" title="Obtain Policy URL">
-
-<section anchor="request" title="Request">
+<t><spanx style="strong">Request</spanx>
+</t>
 <t>Syntax: GET /policy
 </t>
 <t>Request the URL for the Registration Entity's procedures and policy document
 as described in <xref target="policy"/>.
 </t>
-</section>
-
-<section anchor="response" title="Response">
+<t><spanx style="strong">Response</spanx>
+</t>
 <t>
 <list style="symbols">
 <t>HTTP Status code 201 indicates a success.</t>
@@ -449,15 +448,14 @@ procedures and policy document.
 </t>
 </section>
 </section>
-</section>
 
 <section anchor="cds-resource" title="CDS resource">
 <t>Path: /domains/{domain}/cds
 </t>
 
 <section anchor="establishing-initial-trust-enabling-dnssec" title="Establishing Initial Trust (Enabling DNSSEC)">
-
-<section anchor="request-1" title="Request">
+<t><spanx style="strong">Request</spanx>
+</t>
 <t>Syntax: POST /domains/{domain}/cds
 </t>
 <t>Request that an initial set of DS records based on the CDS record in the child
@@ -468,9 +466,8 @@ multiple DS records will be added.
 <t>The body of the POST SHOULD be empty, however server implementations SHOULD
 NOT reject nonempty requests.
 </t>
-</section>
-
-<section anchor="response-1" title="Response">
+<t><spanx style="strong">Response</spanx>
+</t>
 <t>
 <list style="symbols">
 <t>HTTP Status code 201 indicates a success.</t>
@@ -492,20 +489,18 @@ RRset for the child zone.
 &quot;token&quot; resource to fetch a challenge token to insert into the zone.
 </t>
 </section>
-</section>
 
 <section anchor="removing-ds-records" title="Removing DS Records">
-
-<section anchor="request-2" title="Request">
+<t><spanx style="strong">Request</spanx>
+</t>
 <t>Syntax: DELETE /domains/{domain}/cds
 </t>
 <t>Request that the Registration Entity check for a null CDS or CDNSKEY record in
 the child zone, indicating a request that the entire DS RRset be removed.
 This will make the delegation insecure.
 </t>
-</section>
-
-<section anchor="response-2" title="Response">
+<t><spanx style="strong">Response</spanx>
+</t>
 <t>
 <list style="symbols">
 <t>HTTP Status code 200 indicates a success.</t>
@@ -522,11 +517,10 @@ This will make the delegation insecure.
 &quot;token&quot; resource to fetch a challenge token to insert into the zone.
 </t>
 </section>
-</section>
 
 <section anchor="modifying-ds-records" title="Modifying DS Records">
-
-<section anchor="request-3" title="Request">
+<t><spanx style="strong">Request</spanx>
+</t>
 <t>Syntax: PUT /domains/{domain}/cds
 </t>
 <t>Request that the Registration Entity modify the DS RRset based on the CDS
@@ -534,9 +528,8 @@ available in the child zone.  As a result of this request the Registration
 Entity SHOULD add or delete DS or DNSKEY records as indicated by the
 CDS RRset, but MUST NOT delete the entire DS RRset.
 </t>
-</section>
-
-<section anchor="response-3" title="Response">
+<t><spanx style="strong">Response</spanx>
+</t>
 <t>
 <list style="symbols">
 <t>HTTP Status code 200 indicates a success.</t>
@@ -552,7 +545,6 @@ CDS RRset, but MUST NOT delete the entire DS RRset.
 <t>Upon receipt of a 403 response the child operator SHOULD issue a POST for the
 &quot;token&quot; resource to fetch a challenge token to insert into the zone.
 </t>
-</section>
 </section>
 </section>
 
@@ -561,8 +553,8 @@ CDS RRset, but MUST NOT delete the entire DS RRset.
 </t>
 
 <section anchor="establish-initial-trust-with-challenge" title="Establish Initial Trust with Challenge">
-
-<section anchor="request-4" title="Request">
+<t><spanx style="strong">Request</spanx>
+</t>
 <t>Syntax: GET /domains/{domain}/token
 </t>
 <t>The DNSSEC policy of the Registration Entity may require proof that the DNS
@@ -582,9 +574,8 @@ are expired in their DNSSEC policy.
 <t>Note that the _delegate TXT record is publicly visible and therefore cannot be
 treated as a secret token.
 </t>
-</section>
-
-<section anchor="response-4" title="Response">
+<t><spanx style="strong">Response</spanx>
+</t>
 <t>
 <list style="symbols">
 <t>HTTP Status code 200 indicates a success.  A token is included in the
@@ -594,7 +585,6 @@ treated as a secret token.
 <t>HTTP Status code 500 indicates a failure due to unforeseeable reasons.</t>
 </list>
 </t>
-</section>
 </section>
 </section>
 </section>
@@ -676,6 +666,7 @@ exhaustive list of why a 401 may be returned</t>
 Applicability subsection</t>
 <t>cleaned up external references</t>
 <t>added requirement for RE policy and procedure document</t>
+<t>reduce the deep subheading mess</t>
 </list>
 </t>
 </section>

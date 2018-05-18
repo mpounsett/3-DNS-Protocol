@@ -375,14 +375,15 @@ Path: /policy
 
 #### Obtain Policy URL
 
-##### Request
+**Request**
 
 Syntax: GET /policy
 
 Request the URL for the Registration Entity's procedures and policy document
 as described in (#policy).
 
-##### Response
+**Response**
+
    - HTTP Status code 201 indicates a success.
    - HTTP Status code 404 indicates the resource does not exist.
    - HTTP Status code 429 indicates the client has been rate-limited.
@@ -397,7 +398,7 @@ Path: /domains/{domain}/cds
 
 #### Establishing Initial Trust (Enabling DNSSEC)
 
-##### Request
+**Request**
 
 Syntax: POST /domains/{domain}/cds
 
@@ -409,7 +410,8 @@ multiple DS records will be added.
 The body of the POST SHOULD be empty, however server implementations SHOULD
 NOT reject nonempty requests.
 
-##### Response
+**Response**
+
    - HTTP Status code 201 indicates a success.
    - HTTP Status code 400 indicates a failure due to validation.
    - HTTP Status code 401 indicates an unauthorized resource access.
@@ -428,7 +430,8 @@ Upon receipt of a 403 response the child operator SHOULD issue a POST for the
 "token" resource to fetch a challenge token to insert into the zone.
 
 #### Removing DS Records
-##### Request
+
+**Request**
 
 Syntax: DELETE /domains/{domain}/cds
 
@@ -436,7 +439,8 @@ Request that the Registration Entity check for a null CDS or CDNSKEY record in
 the child zone, indicating a request that the entire DS RRset be removed.
 This will make the delegation insecure.
 
-##### Response
+**Response**
+
    - HTTP Status code 200 indicates a success.
    - HTTP Status code 400 indicates a failure due to validation.
    - HTTP Status code 401 indicates an unauthorized resource access.
@@ -450,7 +454,8 @@ Upon receipt of a 403 response the child operator SHOULD issue a POST for the
 "token" resource to fetch a challenge token to insert into the zone.
 
 #### Modifying DS Records
-##### Request
+
+**Request**
 
 Syntax: PUT /domains/{domain}/cds
 
@@ -459,7 +464,8 @@ available in the child zone.  As a result of this request the Registration
 Entity SHOULD add or delete DS or DNSKEY records as indicated by the
 CDS RRset, but MUST NOT delete the entire DS RRset.
 
-##### Response
+**Response**
+
    - HTTP Status code 200 indicates a success.
    - HTTP Status code 400 indicates a failure due to validation.
    - HTTP Status code 401 indicates an unauthorized resource access.
@@ -478,7 +484,7 @@ Path: /domains/{domain}/token
 
 #### Establish Initial Trust with Challenge
 
-##### Request
+**Request**
 
 Syntax: GET /domains/{domain}/token
 
@@ -499,7 +505,8 @@ are expired in their DNSSEC policy.
 Note that the _delegate TXT record is publicly visible and therefore cannot be
 treated as a secret token.
 
-##### Response
+**Response**
+
    - HTTP Status code 200 indicates a success.  A token is included in the
 	 body of the response, as a valid TXT record
    - HTTP Status code 404 indicates the domain does not exist.
@@ -561,6 +568,7 @@ domain names.
     Applicability subsection
   - cleaned up external references
   - added requirement for RE policy and procedure document
+  - reduce the deep subheading mess
 
 ## regext Version 05
 
